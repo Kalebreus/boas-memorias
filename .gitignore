@@ -1,0 +1,6 @@
+backend/target/
+.idea/
+.vscode/
+.env
+*.log
+.DS_Store
