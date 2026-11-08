@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="pt-BR" data-api-base="">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#183d34" />
+    <meta name="description" content="Uma curadoria independente de brinquedos antigos para colecionar, presentear e passar boas memórias adiante." />
+    <title>Boas Memórias — brinquedos com outras histórias</title>
+    <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./src/css/style.css" />
+    <script defer src="./src/js/index.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+    <div class="announcement" role="note">
+      <span>Um lugar para a próxima história de cada brinquedo.</span>
+      <a href="#como-funciona">Conheça a comunidade <span aria-hidden="true">↗</span></a>
+    </div>
+
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="#inicio" aria-label="Boas Memórias, início">
+          <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 38 38"><path d="M19 3.5 22.8 14l11.1-3.4-6.7 9.6 8.4 7.9-11.4-.2L19 38l-5.2-10.1-11.4.2 8.4-7.9-6.7-9.6L15.2 14 19 3.5Z" fill="currentColor"/><circle cx="19" cy="21" r="4.4" fill="#f5f0e5"/></svg></span>
+          <span class="brand-name">boas<span>memórias</span></span>
+        </a>
+
+        <button class="icon-button menu-toggle" id="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="primary-nav">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+
+        <nav class="primary-nav" id="primary-nav" aria-label="Navegação principal">
+          <a href="#catalogo">Explorar brinquedos</a>
+          <a href="#como-funciona">Como funciona</a>
+          <a href="#vender">Quero vender</a>
+        </nav>
+
+        <div class="header-actions">
+          <button class="text-button account-button" type="button" data-open-account="login">Entrar</button>
+          <button class="bag-button" type="button" data-open-cart aria-label="Abrir sacola, 0 itens">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 8.5h13l1.1 12H4.4l1.1-12Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>
+            <span>Sacola</span><span class="bag-count" id="bag-count" aria-live="polite">0</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main id="conteudo">
+      <section class="hero" id="inicio" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow eyebrow-light"><span class="eyebrow-line"></span> Brinquedos com história</p>
+          <h1 id="hero-title">O próximo capítulo começa <em>brincando.</em></h1>
+          <p class="hero-intro">Peças de outras épocas encontram novas casas. Explore achados especiais ou ajude um brinquedo querido a seguir viagem.</p>
+          <div class="hero-actions">
+            <a class="button button-cream" href="#catalogo">Encontrar meu próximo achado <span aria-hidden="true">↗</span></a>
+            <a class="hero-secondary" href="#vender">Tenho um brinquedo para vender <span aria-hidden="true">→</span></a>
+          </div>
+          <div class="hero-note"><span class="note-stars" aria-hidden="true">✳</span><span>Curadoria afetiva<br /><strong>para todas as idades</strong></span></div>
+        </div>
+
+        <div class="hero-art" role="img" aria-label="Ilustração de um carrinho de coleção e um ursinho entre formas coloridas">
+          <div class="art-sun"></div><div class="art-orbit"></div>
+          <div class="art-label"><span>um achado<br />de cada vez</span><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M11 30c9-14 16-15 26-7M31 15l7 8-9 4"/></svg></div>
+          <div class="toy-card toy-card-car" aria-hidden="true">
+            <div class="toy-card-tag">01 · coleção</div>
+            <svg viewBox="0 0 360 260" class="toy-svg car-svg">
+              <ellipse cx="183" cy="216" rx="125" ry="14" fill="#1b4036" opacity=".12"/>
+              <path d="M65 160c6-20 19-31 42-38l29-42c10-15 22-23 43-23h42c17 0 29 7 40 23l26 37c16 5 25 18 27 38v25H66v-20Z" fill="#b6553c"/>
+              <path d="m145 89-24 35h57V76h-5c-13 0-21 4-28 13Zm45-13v48h74l-19-30c-7-12-16-18-32-18h-23Z" fill="#edc78f"/>
+              <path d="M59 155c-2 5-3 10-3 16v18h305v-18c0-9-2-16-7-23l-30-12h-37l-11 16H125l-9-16h-8c-25 0-41 5-49 19Z" fill="#d36d4e"/>
+              <path d="M101 151h27l10 18h-43l6-18Zm196 0h30l8 18h-43l5-18Z" fill="#f3ead6"/>
+              <circle cx="118" cy="189" r="29" fill="#27443a"/><circle cx="118" cy="189" r="16" fill="#d9cbb1"/><circle cx="303" cy="189" r="29" fill="#27443a"/><circle cx="303" cy="189" r="16" fill="#d9cbb1"/>
+              <path d="M187 141h41M195 150h27" stroke="#f2d5a6" stroke-width="4" stroke-linecap="round" opacity=".78"/>
+              <path d="m69 141 13-3m241 3 13 4" stroke="#ffe4ae" stroke-width="5" stroke-linecap="round"/>
+            </svg>
+            <span class="toy-card-caption">Carrinho de coleção <span>✨</span></span>
+          </div>
+          <div class="toy-card toy-card-bear" aria-hidden="true">
+            <div class="toy-card-tag">02 · carinho</div>
+            <svg viewBox="0 0 220 250" class="toy-svg bear-svg">
+              <ellipse cx="110" cy="223" rx="67" ry="10" fill="#1b4036" opacity=".12"/>
+              <circle cx="68" cy="64" r="29" fill="#ba815a"/><circle cx="152" cy="64" r="29" fill="#ba815a"/><circle cx="68" cy="64" r="14" fill="#d7ae83"/><circle cx="152" cy="64" r="14" fill="#d7ae83"/>
+              <circle cx="110" cy="85" r="58" fill="#c99266"/><ellipse cx="110" cy="105" rx="29" ry="22" fill="#ebcfaa"/>
+              <circle cx="91" cy="82" r="4.8" fill="#352b25"/><circle cx="129" cy="82" r="4.8" fill="#352b25"/><ellipse cx="110" cy="100" rx="7" ry="5" fill="#704438"/><path d="M103 108q7 8 14 0" fill="none" stroke="#704438" stroke-width="3" stroke-linecap="round"/>
+              <path d="M62 159c0-26 22-44 48-44s48 18 48 44v28H62v-28Z" fill="#c99266"/><ellipse cx="110" cy="157" rx="22" ry="28" fill="#ead1ad"/>
+              <path d="M78 138 55 173c-7 10 7 20 15 11l24-27m48-19 23 35c7 10-7 20-15 11l-24-27" fill="#c99266"/>
+              <path d="M85 181c-24 0-32 14-25 28 5 9 27 9 44 3l6-18-25-13Zm50 0c24 0 32 14 25 28-5 9-27 9-44 3l-6-18 25-13Z" fill="#ae744f"/>
+              <path d="M89 129q21 14 42 0" fill="none" stroke="#b3573f" stroke-width="9" stroke-linecap="round"/><circle cx="110" cy="143" r="5" fill="#edc78f"/>
+            </svg>
+            <span class="toy-card-caption">Ursinho de abraço <span>♡</span></span>
+          </div>
+          <div class="hero-sticker"><span>✳</span><strong>Peças<br />únicas</strong></div>
+        </div>
+      </section>
+
+      <section class="trust-strip" aria-label="Sobre a loja">
+        <div><span class="trust-icon" aria-hidden="true">✳</span><p><strong>Garimpos especiais</strong><span>Peças para descobrir</span></p></div>
+        <div><span class="trust-icon" aria-hidden="true">♡</span><p><strong>Memórias que circulam</strong><span>Mais histórias, menos gavetas</span></p></div>
+        <div><span class="trust-icon" aria-hidden="true">↗</span><p><strong>De pessoa para pessoa</strong><span>Uma comunidade de colecionadores</span></p></div>
+      </section>
+
+      <section class="catalog-section section-wrap" id="catalogo" aria-labelledby="catalog-title">
+        <div class="section-heading catalog-heading">
+          <div><p class="eyebrow"><span class="eyebrow-line"></span> Garimpe com calma</p><h2 id="catalog-title">Achados para <em>guardar.</em></h2><p class="section-intro">Cada brinquedo tem um jeito próprio de voltar a encantar.</p></div>
+          <label class="search-box"><span class="sr-only">Buscar brinquedos</span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.2 4.2"/></svg><input id="search-input" type="search" placeholder="O que você procura?" autocomplete="off"/><kbd>/</kbd></label>
+        </div>
+
+        <div class="catalog-toolbar">
+          <div class="filter-list" role="group" aria-label="Filtrar por categoria" id="category-filters">
+            <button class="filter-chip is-active" type="button" data-category="Todos" aria-pressed="true">Todos os achados</button>
+            <button class="filter-chip" type="button" data-category="Carrinhos" aria-pressed="false">Carrinhos</button>
+            <button class="filter-chip" type="button" data-category="Bonecas" aria-pressed="false">Bonecas</button>
+            <button class="filter-chip" type="button" data-category="Jogos" aria-pressed="false">Jogos &amp; brinquedos</button>
+          </div>
+          <label class="sort-control"><span>Ordenar:</span><select id="sort-select"><option value="featured">Em destaque</option><option value="price-asc">Menor preço</option><option value="price-desc">Maior preço</option></select></label>
+        </div>
+
+        <p class="demo-note"><span aria-hidden="true">ⓘ</span><span id="demo-note">Vitrine de demonstração: os itens e preços abaixo são ilustrativos.</span></p>
+        <div class="product-grid" id="product-grid" aria-live="polite" aria-busy="false"></div>
+        <div class="empty-state" id="empty-state" hidden><span aria-hidden="true">⌕</span><h3>Nenhum achado por aqui.</h3><p>Tente mudar a busca ou escolher outra categoria.</p><button class="button button-outline" type="button" id="clear-filters">Limpar filtros</button></div>
+        <div class="catalog-footnote"><span class="footnote-spark" aria-hidden="true">✳</span><p>Gostou de uma peça? Salve nos favoritos e acompanhe seu próximo achado.</p><a href="#vender">Tem um achado para dividir? <span aria-hidden="true">→</span></a></div>
+      </section>
+
+      <section class="how-section" id="como-funciona" aria-labelledby="how-title">
+        <div class="how-inner section-wrap">
+          <div class="how-heading"><p class="eyebrow eyebrow-light"><span class="eyebrow-line"></span> Simples assim</p><h2 id="how-title">Uma boa memória<br />merece <em>ir adiante.</em></h2><p>Do primeiro clique ao novo lar, o caminho pode ser leve — e cheio de descobertas.</p><a href="#catalogo" class="text-link text-link-light">Explorar a vitrine <span aria-hidden="true">↗</span></a></div>
+          <ol class="steps-list">
+            <li><span class="step-number">01</span><div><h3>Encontre uma história</h3><p>Explore as peças, veja o estado de conservação e escolha com carinho.</p></div><span class="step-arrow" aria-hidden="true">↘</span></li>
+            <li><span class="step-number">02</span><div><h3>Confira cada detalhe</h3><p>Veja a condição, o preço e a descrição antes de escolher suas peças favoritas.</p></div><span class="step-arrow" aria-hidden="true">↘</span></li>
+            <li><span class="step-number">03</span><div><h3>Monte sua próxima aventura</h3><p>Guarde seus achados na sacola e reúna tudo o que chamou sua atenção.</p></div><span class="step-arrow" aria-hidden="true">✳</span></li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="seller-section section-wrap" id="vender" aria-labelledby="seller-title">
+        <div class="seller-art" aria-hidden="true"><div class="seller-sun"></div><div class="seller-note seller-note-one">ainda tem<br />muita brincadeira</div><div class="seller-note seller-note-two">✳</div><svg viewBox="0 0 320 255"><path d="M83 109c-1-28 16-55 44-62 12-24 53-24 66 0 27 7 44 33 43 62l-9 70c-3 25-22 43-48 43H136c-26 0-45-18-48-43l-5-70Z" fill="#d69056"/><circle cx="96" cy="63" r="27" fill="#d69056"/><circle cx="224" cy="63" r="27" fill="#d69056"/><circle cx="96" cy="63" r="11" fill="#f2d6ae"/><circle cx="224" cy="63" r="11" fill="#f2d6ae"/><ellipse cx="156" cy="113" rx="22" ry="16" fill="#efcfaa"/><circle cx="133" cy="91" r="4" fill="#43352b"/><circle cx="179" cy="91" r="4" fill="#43352b"/><ellipse cx="156" cy="110" rx="6" ry="4" fill="#754a38"/><path d="M150 118q6 7 12 0" fill="none" stroke="#754a38" stroke-width="3"/><path d="M93 168c0-25 27-46 63-46s63 21 63 46v36H93v-36Z" fill="#d69056"/><ellipse cx="156" cy="166" rx="25" ry="32" fill="#f0d3af"/><path d="M131 151h50m-35-16v31m18-31v31" stroke="#457d72" stroke-width="9" stroke-linecap="round"/><path d="M103 202h38m30 0h38" stroke="#bb7542" stroke-width="20" stroke-linecap="round"/></svg></div>
+        <div class="seller-copy"><p class="eyebrow"><span class="eyebrow-line"></span> Para quem vende</p><h2 id="seller-title">Seu baú pode ser o começo de <em>outra aventura.</em></h2><p>Tem aquele brinquedo especial guardado? Crie seu anúncio, conte um pouco da história e encontre alguém que vai cuidar dele.</p><ul class="seller-benefits"><li><span aria-hidden="true">✓</span> Conte a história do brinquedo</li><li><span aria-hidden="true">✓</span> Mostre os detalhes com boas fotos</li><li><span aria-hidden="true">✓</span> Combine a venda com transparência</li></ul><button class="button button-dark" type="button" data-open-listing>Anunciar um brinquedo <span aria-hidden="true">↗</span></button><p class="seller-disclaimer">Para receber anúncios, a API da loja precisa estar conectada.</p></div>
+      </section>
+
+      <section class="newsletter-band" aria-labelledby="newsletter-title"><div class="newsletter-inner"><div class="newsletter-star" aria-hidden="true">✳</div><div><p class="eyebrow eyebrow-light">Cartas do baú</p><h2 id="newsletter-title">Uma dose de <em>nostalgia</em> faz bem.</h2></div><p>Novos achados, histórias e notícias da comunidade — sem pressa, de vez em quando.</p><button type="button" class="button button-cream" data-newsletter>Quero acompanhar <span aria-hidden="true">↗</span></button></div></section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-main section-wrap"><div class="footer-brand-col"><a class="brand brand-footer" href="#inicio"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 38 38"><path d="M19 3.5 22.8 14l11.1-3.4-6.7 9.6 8.4 7.9-11.4-.2L19 38l-5.2-10.1-11.4.2 8.4-7.9-6.7-9.6L15.2 14 19 3.5Z" fill="currentColor"/><circle cx="19" cy="21" r="4.4" fill="#183d34"/></svg></span><span class="brand-name">boas<span>memórias</span></span></a><p>Uma vitrine para brinquedos antigos, novas descobertas e boas histórias.</p></div><div class="footer-links"><div><h3>Descubra</h3><a href="#catalogo">Explorar brinquedos</a><a href="#como-funciona">Como funciona</a></div><div><h3>Faça parte</h3><a href="#vender">Anunciar um brinquedo</a><button type="button" data-open-account="register">Criar uma conta</button></div><div><h3>Boas práticas</h3><a href="#privacidade">Privacidade</a><a href="#seguranca">Segurança</a></div></div></div>
+      <div class="footer-bottom section-wrap"><span>© <span id="current-year"></span> Boas Memórias</span><span>Feito para quem guarda histórias. <span aria-hidden="true">✳</span></span><a href="#inicio">Voltar ao topo ↑</a></div>
+      <div class="footer-legal" id="privacidade"><div class="section-wrap"><p><strong>Privacidade:</strong> este protótipo não envia nem guarda os dados de cadastro. A vitrine contém itens e preços fictícios; pedidos, pagamentos e contato com vendedores ainda não estão habilitados. Conecte a API e revise os termos antes de operar com dados reais.</p><span id="seguranca"></span></div></div>
+    </footer>
+
+    <dialog class="modal" id="account-dialog" aria-labelledby="account-title">
+      <div class="modal-panel"><button class="modal-close" type="button" data-close-dialog aria-label="Fechar janela">×</button><p class="eyebrow"><span class="eyebrow-line"></span> Faça parte</p><h2 id="account-title">Crie seu cantinho.</h2><p class="modal-intro">Seu e-mail, telefone e cidade ajudam a conectar você aos seus novos achados.</p>
+        <div class="account-tabs" role="tablist" aria-label="Acesso à conta"><button class="account-tab is-active" id="register-tab" type="button" role="tab" aria-selected="true" aria-controls="account-form" data-account-tab="register">Criar conta</button><button class="account-tab" id="login-tab" type="button" role="tab" aria-selected="false" aria-controls="login-form" data-account-tab="login">Já tenho conta</button></div>
+        <form class="form-grid" id="account-form">
+          <label class="field field-wide">Nome completo<input name="name" autocomplete="name" required minlength="2" maxlength="100" placeholder="Como podemos te chamar?" /></label>
+          <label class="field field-wide">E-mail<input name="email" autocomplete="email" type="email" required maxlength="254" placeholder="voce@email.com" /></label>
+          <label class="field">Celular<input name="phone" autocomplete="tel" type="tel" required inputmode="tel" placeholder="(11) 99999-9999" /></label>
+          <label class="field">UF<select name="state" autocomplete="address-level1" required><option value="">Selecione</option></select></label>
+          <label class="field field-wide">Cidade<input name="city" autocomplete="address-level2" required maxlength="100" placeholder="Sua cidade" /></label>
+          <label class="field field-wide">Senha<input name="password" autocomplete="new-password" type="password" required minlength="10" maxlength="64" placeholder="Pelo menos 10 caracteres" /></label>
+          <label class="field field-wide">Confirmar senha<input name="confirmPassword" autocomplete="new-password" type="password" required minlength="10" maxlength="64" placeholder="Digite a senha novamente" /></label>
+          <details class="privacy-details field-wide"><summary>Como os dados do cadastro serão usados</summary><p>Nome, e-mail, celular e cidade/UF servem para criar e proteger sua conta. O telefone e a localização não aparecem nos anúncios públicos. A senha é protegida com hash no servidor. A versão de demonstração não envia nem guarda esses dados. Antes da operação real, a loja precisa publicar sua política de privacidade completa.</p></details>
+          <label class="checkbox-field field-wide"><input type="checkbox" name="consent" required /><span>Li o aviso de privacidade acima e aceito o uso dos dados para criar minha conta.</span></label>
+          <div class="privacy-callout field-wide"><strong>Seu endereço completo não é solicitado.</strong> Cidade e estado ficam vinculados à conta; telefone e e-mail não aparecem nos anúncios públicos.</div>
+          <button class="button button-dark field-wide" type="submit">Criar minha conta <span aria-hidden="true">↗</span></button>
+          <p class="form-message field-wide" id="account-message" role="status" aria-live="polite"></p>
+        </form>
+        <form class="form-grid" id="login-form" hidden>
+          <label class="field field-wide">E-mail<input name="email" autocomplete="email" type="email" required maxlength="254" placeholder="voce@email.com" /></label>
+          <label class="field field-wide">Senha<input name="password" autocomplete="current-password" type="password" required maxlength="72" placeholder="Sua senha" /></label>
+          <button class="button button-dark field-wide" type="submit">Entrar na minha conta <span aria-hidden="true">↗</span></button>
+          <p class="form-message field-wide" id="login-message" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </dialog>
+
+    <dialog class="modal" id="listing-dialog" aria-labelledby="listing-title">
+      <div class="modal-panel"><button class="modal-close" type="button" data-close-dialog aria-label="Fechar janela">×</button><p class="eyebrow"><span class="eyebrow-line"></span> Um novo capítulo</p><h2 id="listing-title">Conte sobre o seu achado.</h2><p class="modal-intro">Uma descrição honesta e fotos nítidas ajudam a encontrar a pessoa certa.</p>
+        <form class="form-grid" id="listing-form">
+          <label class="field field-wide">Nome do brinquedo<input name="title" required maxlength="100" placeholder="Ex.: carrinho de coleção" /></label>
+          <label class="field">Categoria<select name="category" required><option value="">Selecione</option><option>Carrinhos</option><option>Bonecas</option><option>Jogos</option><option>Outros</option></select></label>
+          <label class="field">Década aproximada<input name="decade" inputmode="numeric" maxlength="4" placeholder="Ex.: 1980" /></label>
+          <label class="field">Conservação<select name="condition" required><option value="">Selecione</option><option>Excelente</option><option>Muito boa</option><option>Boa</option><option>Com marcas do tempo</option></select></label>
+          <label class="field">Preço (R$)<input name="price" type="number" min="1" max="1000000" step="0.01" required placeholder="0,00" /></label>
+          <label class="field field-wide">Descrição<textarea name="description" rows="4" required minlength="20" maxlength="1200" placeholder="Conte o que faz essa peça ser especial e descreva qualquer detalhe importante."></textarea></label>
+          <label class="field field-wide">Link público HTTPS da foto (opcional)<input name="imageUrl" type="url" maxlength="500" placeholder="https://" /><span class="field-help">A imagem precisa estar publicada em um endereço HTTPS acessível a todos.</span></label>
+          <p class="privacy-callout field-wide">Seu anúncio ficará visível publicamente após a API estar conectada. Não inclua telefone, e-mail ou endereço na descrição.</p>
+          <button class="button button-dark field-wide" type="submit">Enviar anúncio <span aria-hidden="true">↗</span></button><p class="form-message field-wide" id="listing-message" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </dialog>
+
+    <dialog class="cart-dialog" id="cart-dialog" aria-labelledby="cart-title">
+      <div class="cart-panel"><div class="cart-heading"><div><p class="eyebrow"><span class="eyebrow-line"></span> Seus achados</p><h2 id="cart-title">Sua sacola</h2></div><button class="modal-close" type="button" data-close-dialog aria-label="Fechar sacola">×</button></div><div class="cart-items" id="cart-items"></div><div class="cart-empty" id="cart-empty"><span aria-hidden="true">✳</span><h3>Por enquanto, ela está vazia.</h3><p>Tem um achado esperando por você.</p><button class="text-link" type="button" data-close-dialog>Voltar à vitrine <span aria-hidden="true">→</span></button></div><div class="cart-total" id="cart-total" hidden><div><span>Total demonstrativo</span><strong id="cart-total-value"></strong></div><p>Esta vitrine não processa pedidos nem pagamentos.</p><button class="button button-dark" id="checkout-button" type="button">Continuar com interesse</button><p class="form-message" id="cart-message" role="status" aria-live="polite"></p></div></div>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
