@@ -16,21 +16,29 @@ O planejamento foi organizado em torno das necessidades de quem compra e de quem
 6. **Acessibilidade e alcance:** usar HTML semântico, foco visível, rótulos acessíveis, navegação por teclado e layouts adaptados para celular, tablet e desktop.
 7. **Evolução:** publicar o front-end no Pages e hospedar API e banco separadamente. Só então conectar pagamentos, logística, mensagens, upload de imagens e moderação.
 
-## Estrutura publicada
-
-O GitHub Pages publica a interface estática em `site/`. O pacote `boas-memorias-backend.zip` contém a API Java e o esquema SQL; extraia o arquivo na raiz para obter a pasta `backend/`.
+## Estrutura do projeto
 
 ```text
 boas-memorias/
-├── .github/workflows/pages.yml   # publicação automática no Pages
-├── site/                         # vitrine publicada
-│   ├── index.html
-│   ├── anunciar.html
-│   ├── vendedor.html
+├── .github/workflows/pages.yml   # publicação automática do front-end no Pages
+├── backend/                      # API Java Spring Boot
+│   ├── pom.xml
+│   └── src/main/
+│       ├── java/br/com/boasmemorias/
+│       └── resources/application.properties
+├── site/                         # único conteúdo publicado pelo Pages
+│   ├── index.html                # vitrine e catálogo de produtos
+│   ├── cadastro-vendedor.html    # criação da conta e entrada do vendedor
+│   ├── dados-vendedor.html       # edição dos dados do perfil público
+│   ├── anunciar.html             # cadastro e prévia do produto
+│   ├── vendedor.html             # perfil público, contatos e anúncios do vendedor
 │   └── src/
-│       ├── css/style.css
-│       └── js/                    # vitrine, anúncio e perfil público
-├── boas-memorias-backend.zip     # API Java e banco PostgreSQL
+│       ├── css/style.css         # estilos globais e responsividade
+│       ├── js/index.js           # busca, filtros, favoritos, sacola e API
+│       ├── js/seller-account.js  # conta e dados do perfil do vendedor
+│       ├── js/seller-profile-form.js # formulário separado de perfil público
+│       ├── js/seller.js          # cadastro do produto e mídias de prévia
+│       └── js/seller-profile.js  # leitura segura do perfil público
 └── README.md
 ```
 
@@ -44,11 +52,11 @@ boas-memorias/
 
 ## Página para vendedores
 
-Na página `site/anunciar.html`, o vendedor informa nome, categoria, década aproximada, conservação, preço e descrição; pode selecionar até 6 fotos JPG/PNG/WebP e 1 vídeo MP4/WebM. O cartão de prévia inclui galeria de fotos selecionáveis e player de vídeo. Cada foto aceita até 10 MB e o vídeo até 50 MB. O formulário valida os campos e limites aceitos pela API Java; o cadastro é vinculado a uma conta autenticada, e telefone/endereço não são exibidos no anúncio público.
+Na página `site/cadastro-vendedor.html`, o vendedor cria ou acessa sua conta com nome, e-mail, celular e cidade/UF. A página `site/dados-vendedor.html` reúne o resumo, WhatsApp público e redes sociais, com consentimento separado para divulgar os dados escolhidos no perfil público. A página `site/anunciar.html` contém somente os dados do produto e a prévia do anúncio: nome, categoria, década aproximada, conservação, preço, descrição, até 6 fotos JPG/PNG/WebP e 1 vídeo MP4/WebM. O cadastro do produto é vinculado à conta autenticada; telefone privado e endereço residencial não são exibidos na vitrine.
 
 O vendedor também precisa completar um perfil público antes de publicar: resumo, WhatsApp, ao menos uma rede social e autorização explícita para mostrar nome, cidade/UF e os contatos informados. Há campos para Instagram, Facebook, TikTok, YouTube, X, LinkedIn, site e links adicionais (um por linha). E-mail, senha, número privado e endereço residencial não aparecem no perfil. A página `site/vendedor.html` exibe esses dados e os anúncios ativos; os cards da área Explorar apontam para esse perfil. O selo de reputação informa “Sem avaliações” enquanto não existir um fluxo de vendas concluídas que permita calcular uma nota confiável.
 
-Enquanto `data-api-base` estiver vazio, a página só monta a prévia no navegador. Arquivos escolhidos usam URLs temporárias locais e não são enviados nem salvos; a API atual também não aceita fotos ou vídeos. Para publicar mídias reais, configure um serviço de armazenamento durável e endpoints de upload na API. Quando a API estiver hospedada, configure o mesmo valor HTTPS nos atributos `data-api-base` de `site/index.html`, `site/anunciar.html` e `site/vendedor.html`, além da origem do Pages em `CORS_ALLOWED_ORIGIN` no servidor.
+Enquanto `data-api-base` estiver vazio, o cadastro, os dados do perfil e os anúncios não são salvos. Arquivos escolhidos usam URLs temporárias locais e não são enviados; a API atual também não aceita fotos ou vídeos. Para publicar mídias reais, configure um serviço de armazenamento durável e endpoints de upload na API. Quando a API estiver hospedada, configure o mesmo valor HTTPS nos atributos `data-api-base` de `site/index.html`, `site/cadastro-vendedor.html`, `site/dados-vendedor.html`, `site/anunciar.html` e `site/vendedor.html`, além da origem do Pages em `CORS_ALLOWED_ORIGIN` no servidor.
 
 ## Executar a interface
 
@@ -79,13 +87,13 @@ mvn -f backend/pom.xml spring-boot:run
 
 Configure uma chave JWT aleatória e exclusiva no ambiente; não grave segredos no Git. O projeto aplica `schema.sql` ao iniciar. Para produção, use um banco PostgreSQL gerenciado com backups e credenciais próprias.
 
-Depois de hospedar a API em HTTPS, coloque a origem completa no atributo `data-api-base` de `site/index.html`, `site/anunciar.html` e `site/vendedor.html`, por exemplo:
+Depois de hospedar a API em HTTPS, coloque a origem completa no atributo `data-api-base` das páginas `site/index.html`, `site/cadastro-vendedor.html`, `site/dados-vendedor.html`, `site/anunciar.html` e `site/vendedor.html`, por exemplo:
 
 ```html
 <html lang="pt-BR" data-api-base="https://api.seu-dominio.com">
 ```
 
-Configure `CORS_ALLOWED_ORIGIN` com a origem exata do Pages (somente protocolo e host, sem o caminho `/boas-memorias`). O front-end usa `POST /api/auth/register`, `POST /api/auth/login`, `GET /api/sellers/me`, `PUT /api/sellers/me/profile` e `POST /api/products`. A vitrine lista anúncios ativos em `GET /api/products`; cada card inclui o nome, cidade/UF e estado de avaliações do vendedor. `GET /api/sellers/{id}` retorna o perfil público e anúncios disponíveis. O token fica somente na memória da página; fechar ou atualizar a página exige entrar novamente.
+Configure `CORS_ALLOWED_ORIGIN` com a origem exata do Pages (somente protocolo e host, sem o caminho `/boas-memorias`). O front-end usa `POST /api/auth/register`, `POST /api/auth/login`, `GET /api/sellers/me`, `PUT /api/sellers/me/profile` e `POST /api/products`. A vitrine lista anúncios ativos em `GET /api/products` e mostra um link para o perfil público separado do vendedor. `GET /api/sellers/{id}` retorna o perfil público e anúncios disponíveis. O token de sessão fica em `sessionStorage`; fechar a aba encerra a sessão.
 
 A API ainda não processa pedidos nem confirma transações. Por isso, nenhum perfil recebe nota inventada: a área de reputação permanece sem avaliações até existir um mecanismo confiável de compra concluída e avaliação. O contato pelo WhatsApp e redes sociais ocorre fora do site e não verifica identidade nem elimina risco de fraude.
 
