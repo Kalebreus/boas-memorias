@@ -50,6 +50,18 @@
     const favorite = favorites.has(item.id);
     const imageUrl = safeImageUrl(item.imageUrl);
     const image = imageUrl ? `<img class="product-photo" src="${escapeHtml(imageUrl)}" alt="Foto de ${safeTitle}" loading="lazy" decoding="async" referrerpolicy="no-referrer" />` : "";
+    const seller = item.seller;
+    const sellerProfileUrl = seller?.id ? `./vendedor.html?id=${encodeURIComponent(seller.id)}` : "";
+    const ratingCount = Number(seller?.ratingCount) || 0;
+    const ratingAverage = Number(seller?.ratingAverage);
+    const sellerRating = ratingCount > 0 && Number.isFinite(ratingAverage)
+      ? `★ ${ratingAverage.toFixed(1)} · ${ratingCount} ${ratingCount === 1 ? "avaliação" : "avaliações"}`
+      : "Sem avaliações";
+    const sellerCard = sellerProfileUrl ? `<div class="product-seller">
+        <a class="product-seller-name" href="${escapeHtml(sellerProfileUrl)}">Vendido por ${escapeHtml(seller.name)}</a>
+        <span class="product-seller-reputation" aria-label="Reputação do vendedor: ${escapeHtml(sellerRating)}">${escapeHtml(sellerRating)}</span>
+        <span class="product-seller-location">${escapeHtml(seller.city)}, ${escapeHtml(seller.state)}</span>
+      </div>` : "";
     return `<article class="product-card" style="--product-bg:${item.tone}">
       <div class="product-media">
         <span class="product-badge">${item.isDemo ? "Demonstração" : escapeHtml(item.badge)}</span>
@@ -59,6 +71,7 @@
       <div class="product-details">
         <div class="product-meta"><span>${escapeHtml(item.category)}</span><span>${escapeHtml(item.condition)}</span></div>
         <h3 class="product-title">${safeTitle}</h3><p class="product-subtitle">${escapeHtml(item.subtitle)}</p>
+        ${sellerCard}
         <div class="product-bottom"><span class="product-price">${money.format(item.price)}</span><button class="add-button" type="button" data-add="${item.id}" aria-label="Adicionar ${safeTitle} à sacola">${cart.has(item.id) ? "Na sacola" : "Adicionar"}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14m-7-7h14"/></svg></button></div>
       </div>
     </article>`;
@@ -80,7 +93,7 @@
     const filtered = products.filter((item) => {
       const category = categoryMap[item.category] || item.category;
       const matchesCategory = activeCategory === "Todos" || category === activeCategory;
-      const content = `${item.title} ${item.subtitle} ${item.category} ${item.condition}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      const content = `${item.title} ${item.subtitle} ${item.category} ${item.condition} ${item.seller?.name || ""} ${item.seller?.city || ""}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
       return matchesCategory && content.includes(normalized);
     });
     if (activeSort === "price-asc") filtered.sort((a, b) => a.price - b.price);
@@ -163,7 +176,8 @@
       id: item.id, title: item.title, subtitle: `${decade} · ${categories[item.category] || "Brinquedo"}`,
       category: categories[item.category] || "Outros", price: Number(item.price),
       condition: conditions[item.condition] || "Sem informação", badge: "Comunidade",
-      tone: "#e8dfcc", type: art[item.category] || "bear", imageUrl: item.imageUrl, isDemo: false
+      tone: "#e8dfcc", type: art[item.category] || "bear", imageUrl: item.imageUrl,
+      seller: item.seller, isDemo: false
     };
   }
 
