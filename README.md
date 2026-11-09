@@ -28,9 +28,11 @@ boas-memorias/
 │       └── resources/application.properties
 ├── site/                         # único conteúdo publicado pelo Pages
 │   ├── index.html                # página e formulários semânticos
+│   ├── anunciar.html             # cadastro guiado e prévia do anúncio
 │   └── src/
 │       ├── css/style.css         # estilos globais e responsividade
-│       └── js/index.js           # busca, filtros, favoritos, sacola e API
+│       ├── js/index.js           # busca, filtros, favoritos, sacola e API
+│       └── js/seller.js          # cadastro do produto, prévia e integração da API
 └── README.md
 ```
 
@@ -41,6 +43,12 @@ boas-memorias/
 - **Java:** API REST com Spring Boot para criar conta, autenticar e publicar anúncios. Spring Security protege a publicação; BCrypt guarda hashes de senhas e tokens JWT têm validade limitada.
 - **SQL:** PostgreSQL mantém usuários e anúncios. `backend/src/main/resources/schema.sql` cria as tabelas, índices, chaves estrangeiras e restrições para preço, estado, categoria e conservação.
 - **JavaScript:** interação da vitrine e chamadas à API. Sem `data-api-base`, os formulários avisam que estão em demonstração e não enviam nem guardam dados pessoais.
+
+## Página para vendedores
+
+Na página `site/anunciar.html`, o vendedor informa nome, categoria, década aproximada, conservação, preço, descrição e, opcionalmente, o link HTTPS de uma foto. O cartão de prévia se atualiza enquanto os campos são preenchidos. O formulário valida os campos e limites aceitos pela API Java; o cadastro é vinculado a uma conta autenticada, e telefone/endereço não são exibidos no anúncio público. O protótipo recebe um link público de imagem, mas ainda não oferece upload de arquivos.
+
+Enquanto `data-api-base` estiver vazio, a página só monta a prévia no navegador. Ela avisa que não enviou nem salvou o anúncio. Quando a API estiver hospedada, configure o mesmo valor HTTPS nos atributos `data-api-base` de `site/index.html` e `site/anunciar.html`, além da origem do Pages em `CORS_ALLOWED_ORIGIN` no servidor.
 
 ## Executar a interface
 
@@ -71,7 +79,7 @@ mvn -f backend/pom.xml spring-boot:run
 
 Configure uma chave JWT aleatória e exclusiva no ambiente; não grave segredos no Git. O projeto aplica `schema.sql` ao iniciar. Para produção, use um banco PostgreSQL gerenciado com backups e credenciais próprias.
 
-Depois de hospedar a API em HTTPS, coloque a origem completa no atributo `data-api-base` de `site/index.html`, por exemplo:
+Depois de hospedar a API em HTTPS, coloque a origem completa no atributo `data-api-base` de `site/index.html` e `site/anunciar.html`, por exemplo:
 
 ```html
 <html lang="pt-BR" data-api-base="https://api.seu-dominio.com">
