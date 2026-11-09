@@ -30,13 +30,144 @@
   const conditionInput = $("#product-condition");
   const priceInput = $("#product-price");
   const descriptionInput = $("#product-description");
-  const imageUrlInput = $("#product-image-url");
+  const imagesInput = $("#product-images");
+  const videoInput = $("#product-video");
+  const mediaFiles = $("#seller-media-files");
+  const mediaMessage = $("#seller-media-message");
+  const previewThumbnails = $("#preview-thumbnails");
+  const previewVideoWrap = $("#preview-video-wrap");
+  const previewVideo = $("#preview-video");
+  const maxPhotos = 6;
+  const maxPhotoBytes = 10 * 1024 * 1024;
+  const maxVideoBytes = 50 * 1024 * 1024;
+  const allowedPhotoTypes = new Set(["image/jpeg", "image/png", "image/webp"]);
+  const allowedVideoTypes = new Set(["video/mp4", "video/webm"]);
+  const selectedPhotos = [];
+  let selectedVideo = null;
+  let activePhotoIndex = 0;
   let accessToken = null;
 
   function message(target, text, kind = "") {
     target.textContent = text;
     target.classList.toggle("is-error", kind === "error");
     target.classList.toggle("is-success", kind === "success");
+  }
+
+  function updateMediaPreview() {
+    if (selectedPhotos.length) {
+      activePhotoIndex = Math.min(activePhotoIndex, selectedPhotos.length - 1);
+      $("#preview-image").src = selectedPhotos[activePhotoIndex].url;
+      $("#preview-image").hidden = false;
+      $("#preview-placeholder").hidden = true;
+      previewThumbnails.replaceChildren(...selectedPhotos.map((photo, index) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = `seller-preview-thumb${index === activePhotoIndex ? " is-active" : ""}`;
+        button.dataset.previewPhoto = String(index);
+        button.setAttribute("aria-label", `Mostrar foto ${index + 1}: ${photo.file.name}`);
+        button.setAttribute("aria-pressed", String(index === activePhotoIndex));
+        const image = document.createElement("img");
+        image.src = photo.url;
+        image.alt = "";
+        button.append(image);
+        return button;
+      }));
+      previewThumbnails.hidden = selectedPhotos.length < 2;
+    } else {
+      $("#preview-image").removeAttribute("src");
+      $("#preview-image").hidden = true;
+      $("#preview-placeholder").hidden = false;
+      previewThumbnails.replaceChildren();
+      previewThumbnails.hidden = true;
+      activePhotoIndex = 0;
+    }
+
+    if (selectedVideo) {
+      if (previewVideo.src !== selectedVideo.url) previewVideo.src = selectedVideo.url;
+      previewVideoWrap.hidden = false;
+    } else {
+      previewVideo.pause();
+      previewVideo.removeAttribute("src");
+      previewVideo.load();
+      previewVideoWrap.hidden = true;
+    }
+  }
+
+  function renderSelectedMedia() {
+    const rows = selectedPhotos.map((photo, index) => {
+      const row = document.createElement("div");
+      row.className = "seller-media-file";
+      const thumbnail = document.createElement("img");
+      thumbnail.src = photo.url;
+      thumbnail.alt = "";
+      const name = document.createElement("span");
+      name.className = "seller-media-file-name";
+      name.textContent = photo.file.name;
+      const remove = document.createElement("button");
+      remove.type = "button";
+      remove.className = "seller-media-file-remove";
+      remove.dataset.removePhoto = String(index);
+      remove.setAttribute("aria-label", `Remover foto ${photo.file.name}`);
+      remove.textContent = "Remover";
+      row.append(thumbnail, name, remove);
+      return row;
+    });
+    if (selectedVideo) {
+      const row = document.createElement("div");
+      row.className = "seller-media-file";
+      const icon = document.createElement("span");
+      icon.className = "seller-media-file-icon";
+      icon.setAttribute("aria-hidden", "true");
+      icon.textContent = "▶";
+      const name = document.createElement("span");
+      name.className = "seller-media-file-name";
+      name.textContent = selectedVideo.file.name;
+      const remove = document.createElement("button");
+      remove.type = "button";
+      remove.className = "seller-media-file-remove";
+      remove.dataset.removeVideo = "true";
+      remove.setAttribute("aria-label", `Remover vídeo ${selectedVideo.file.name}`);
+      remove.textContent = "Remover";
+      row.append(icon, name, remove);
+      rows.push(row);
+    }
+    mediaFiles.replaceChildren(...rows);
+    updateMediaPreview();
+  }
+
+  function addPhotos(files) {
+    if (!files.length) return;
+    if (selectedPhotos.length + files.length > maxPhotos) {
+      message(mediaMessage, `Você pode selecionar até ${maxPhotos} fotos. Remova uma foto para adicionar outra.`, "error");
+      return;
+    }
+    if (files.some((file) => !allowedPhotoTypes.has(file.type))) {
+      message(mediaMessage, "Escolha fotos JPG, PNG ou WebP.", "error");
+      return;
+    }
+    if (files.some((file) => file.size > maxPhotoBytes)) {
+      message(mediaMessage, "Cada foto pode ter no máximo 10 MB.", "error");
+      return;
+    }
+    files.forEach((file) => selectedPhotos.push({ file, url: URL.createObjectURL(file) }));
+    message(mediaMessage, `${selectedPhotos.length} ${selectedPhotos.length === 1 ? "foto selecionada" : "fotos selecionadas"}.`, "success");
+    renderSelectedMedia();
+  }
+
+  function setVideo(file) {
+    if (!file) return;
+    if (!allowedVideoTypes.has(file.type)) {
+      message(mediaMessage, "Escolha um vídeo MP4 ou WebM.", "error");
+      return;
+    }
+    if (file.size > maxVideoBytes) {
+      message(mediaMessage, "O vídeo pode ter no máximo 50 MB.", "error");
+      return;
+    }
+    if (selectedVideo) URL.revokeObjectURL(selectedVideo.url);
+    selectedVideo = { file, url: URL.createObjectURL(file) };
+    message(mediaMessage, "Vídeo selecionado. Confira a prévia antes de continuar.", "success");
+    renderSelectedMedia();
   }
 
   async function request(path, options = {}) {
@@ -78,7 +209,7 @@
     notice.classList.remove("is-demo");
     notice.classList.add("is-live");
     notice.querySelector("strong").textContent = "Conta pronta para publicar";
-    notice.querySelector("p").textContent = "Revise a prévia e publique quando estiver satisfeito. O anúncio será associado à sua conta.";
+    notice.querySelector("p").textContent = "Revise os detalhes e publique quando estiver satisfeito. O servidor atual ainda não armazena fotos ou vídeos selecionados.";
     productButton.dataset.idleLabel = "Publicar anúncio";
     productButton.textContent = productButton.dataset.idleLabel;
   }
@@ -92,7 +223,7 @@
     notice.classList.remove("is-live");
     notice.classList.add("is-demo");
     notice.querySelector("strong").textContent = "Prévia de demonstração";
-    notice.querySelector("p").textContent = "Sua conta foi desconectada. Entre novamente quando quiser publicar.";
+    notice.querySelector("p").textContent = "Sua conta foi desconectada. Entre novamente quando quiser publicar. Mídias selecionadas ainda não são enviadas ao servidor.";
     productButton.dataset.idleLabel = "Entrar para publicar";
     productButton.textContent = productButton.dataset.idleLabel;
   }
@@ -107,23 +238,6 @@
     const price = Number(priceInput.value);
     $("#preview-price").textContent = Number.isFinite(price) && price > 0 ? money.format(price) : "R$ 0,00";
     $("#description-count").textContent = String(descriptionInput.value.length);
-    const image = $("#preview-image");
-    const placeholder = $("#preview-placeholder");
-    const imageValue = imageUrlInput.value.trim();
-    if (imageValue) {
-      try {
-        const imageUrl = new URL(imageValue);
-        if (imageUrl.protocol === "https:") {
-          image.src = imageUrl.href;
-          image.hidden = false;
-          placeholder.hidden = true;
-          return;
-        }
-      } catch { /* A validação do formulário explica URLs inválidas. */ }
-    }
-    image.removeAttribute("src");
-    image.hidden = true;
-    placeholder.hidden = false;
   }
 
   function showAuthPanel() {
@@ -139,15 +253,45 @@
     input.addEventListener("input", updatePreview);
     input.addEventListener("change", updatePreview);
   });
-  imageUrlInput.addEventListener("input", () => {
-    imageUrlInput.setCustomValidity("");
-    updatePreview();
+  imagesInput.addEventListener("change", () => {
+    addPhotos(Array.from(imagesInput.files || []));
+    imagesInput.value = "";
   });
-  imageUrlInput.addEventListener("change", updatePreview);
+  videoInput.addEventListener("change", () => {
+    setVideo(videoInput.files?.[0]);
+    videoInput.value = "";
+  });
+  mediaFiles.addEventListener("click", (event) => {
+    const removePhoto = event.target.closest("[data-remove-photo]");
+    if (removePhoto) {
+      const index = Number(removePhoto.dataset.removePhoto);
+      URL.revokeObjectURL(selectedPhotos[index].url);
+      selectedPhotos.splice(index, 1);
+      renderSelectedMedia();
+      message(mediaMessage, `${selectedPhotos.length} ${selectedPhotos.length === 1 ? "foto selecionada" : "fotos selecionadas"}.`, "success");
+      return;
+    }
+    if (event.target.closest("[data-remove-video]")) {
+      URL.revokeObjectURL(selectedVideo.url);
+      selectedVideo = null;
+      renderSelectedMedia();
+      message(mediaMessage, "Vídeo removido da prévia.", "success");
+    }
+  });
+  previewThumbnails.addEventListener("click", (event) => {
+    const thumbnail = event.target.closest("[data-preview-photo]");
+    if (!thumbnail) return;
+    activePhotoIndex = Number(thumbnail.dataset.previewPhoto);
+    updateMediaPreview();
+  });
   $("#preview-image").addEventListener("error", () => {
     $("#preview-image").hidden = true;
     $("#preview-image").removeAttribute("src");
     $("#preview-placeholder").hidden = false;
+  });
+  window.addEventListener("pagehide", () => {
+    selectedPhotos.forEach((photo) => URL.revokeObjectURL(photo.url));
+    if (selectedVideo) URL.revokeObjectURL(selectedVideo.url);
   });
   $("#seller-auth-tabs").addEventListener("click", (event) => {
     const tab = event.target.closest("[data-auth-tab]");
@@ -163,7 +307,7 @@
     notice.classList.remove("is-demo");
     notice.classList.add("is-live");
     notice.querySelector("strong").textContent = "Publicação disponível";
-    notice.querySelector("p").textContent = "Entre na sua conta ou crie uma para publicar o anúncio. A prévia permanece visível enquanto você preenche.";
+    notice.querySelector("p").textContent = "Entre na sua conta ou crie uma para publicar. A API ainda não recebe fotos ou vídeos; os arquivos selecionados servem apenas para prévia.";
     authPanel.hidden = false;
     productButton.dataset.idleLabel = "Entrar para publicar";
     productButton.textContent = productButton.dataset.idleLabel;
@@ -209,17 +353,14 @@
 
   productForm.addEventListener("submit", async (event) => {
     event.preventDefault();
-    const imageValue = imageUrlInput.value.trim();
-    let validHttpsImage = true;
-    if (imageValue) {
-      try { validHttpsImage = new URL(imageValue).protocol === "https:"; }
-      catch { validHttpsImage = false; }
-    }
-    imageUrlInput.setCustomValidity(validHttpsImage ? "" : "Informe um link público que comece com https://.");
     if (!productForm.reportValidity()) return;
     if (!API_BASE_URL) {
-      message(productMessage, "Prévia pronta. Este site ainda não está conectado à API: o anúncio não foi enviado nem salvo.", "error");
+      message(productMessage, "Prévia pronta. O anúncio e as mídias não foram enviados nem salvos; os arquivos ficam apenas neste navegador.", "error");
       updatePreview();
+      return;
+    }
+    if (selectedPhotos.length || selectedVideo) {
+      message(productMessage, "A API atual não aceita arquivos de foto ou vídeo. Eles aparecem somente na prévia e não serão publicados.", "error");
       return;
     }
     if (!accessToken) {
@@ -233,7 +374,7 @@
       title: data.title.trim(), category: data.category,
       decade: data.decade ? Number(data.decade) : null,
       condition: data.condition, price: Number(data.price),
-      description: data.description.trim(), imageUrl: data.imageUrl.trim() || null
+      description: data.description.trim(), imageUrl: null
     };
     setBusy(productForm, true, "Publicando…");
     try {
