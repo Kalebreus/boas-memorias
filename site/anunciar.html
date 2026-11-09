@@ -48,7 +48,7 @@
 
         <div class="seller-notice is-demo" id="api-notice" role="status" aria-live="polite">
           <span class="seller-notice-icon" aria-hidden="true">ⓘ</span>
-          <div><strong>Prévia de demonstração</strong><p>A página ainda não está conectada à API. Você pode organizar o anúncio e conferir a prévia; nada será enviado ou salvo até a API Java e o PostgreSQL serem hospedados e conectados.</p></div>
+          <div><strong>Prévia de demonstração</strong><p>A página ainda não está conectada ao servidor. Você pode selecionar fotos e vídeo e conferir as prévias; os arquivos ficam apenas neste navegador até a API e o armazenamento de mídia serem configurados.</p></div>
         </div>
 
         <section class="seller-auth-card" id="seller-auth" aria-labelledby="seller-auth-title" hidden>
@@ -102,7 +102,16 @@
                 <label class="seller-field" for="product-price">Preço (R$) <span class="required-mark">*</span><div class="seller-price-input"><span aria-hidden="true">R$</span><input id="product-price" name="price" type="number" min="1" max="1000000" step="0.01" inputmode="decimal" required placeholder="0,00" /></div><span class="seller-hint">Entre R$ 1,00 e R$ 1.000.000,00.</span></label>
               </div>
               <label class="seller-field seller-field-wide" for="product-description">História e detalhes <span class="required-mark">*</span><textarea id="product-description" name="description" rows="5" minlength="20" maxlength="1200" required placeholder="Descreva materiais, marcas, peças que acompanham e qualquer sinal do tempo. De 20 a 1.200 caracteres."></textarea><span class="seller-counter"><span id="description-count">0</span> / 1.200 caracteres</span></label>
-              <label class="seller-field seller-field-wide" for="product-image-url">Link público HTTPS da foto <span class="seller-optional">opcional</span><input id="product-image-url" name="imageUrl" type="url" maxlength="500" placeholder="https://exemplo.com/foto-do-brinquedo.jpg" autocomplete="url" /><span class="seller-hint">O protótipo aceita o endereço público da imagem; envio de arquivos ainda não está disponível.</span></label>
+              <fieldset class="seller-media-fields seller-field-wide">
+                <legend>Fotos e vídeo <span class="seller-optional">opcional</span></legend>
+                <p class="seller-hint seller-media-intro">Adicione até 6 fotos e 1 vídeo para mostrar melhor a peça. As prévias aparecem no cartão ao lado.</p>
+                <div class="seller-media-inputs">
+                  <label class="seller-field" for="product-images">Fotos do produto<input class="seller-file-input" id="product-images" name="images" type="file" accept="image/jpeg,image/png,image/webp" multiple aria-describedby="product-images-hint" /><span class="seller-hint" id="product-images-hint">JPG, PNG ou WebP · até 10 MB por foto</span></label>
+                  <label class="seller-field" for="product-video">Vídeo do produto<input class="seller-file-input" id="product-video" name="video" type="file" accept="video/mp4,video/webm" aria-describedby="product-video-hint" /><span class="seller-hint" id="product-video-hint">MP4 ou WebM · até 50 MB · 1 vídeo</span></label>
+                </div>
+                <div class="seller-media-files" id="seller-media-files" aria-live="polite"></div>
+                <p class="seller-message seller-media-message" id="seller-media-message" role="status" aria-live="polite"></p>
+              </fieldset>
               <div class="seller-guidance seller-field-wide"><span aria-hidden="true">✳</span><p><strong>Antes de publicar</strong>Confira a conservação, mostre defeitos com clareza e não inclua telefone, e-mail ou endereço na descrição.</p></div>
               <button class="button button-dark seller-submit seller-field-wide" id="product-submit" type="submit">Preparar prévia <span aria-hidden="true">↗</span></button>
               <p class="seller-message seller-field-wide" id="product-message" role="status" aria-live="polite"></p>
@@ -116,6 +125,11 @@
               <img class="seller-preview-image" id="preview-image" alt="Prévia da foto do brinquedo" hidden />
               <span class="seller-preview-badge">Novo anúncio</span>
             </div>
+            <div class="seller-preview-thumbnails" id="preview-thumbnails" aria-label="Fotos selecionadas" hidden></div>
+            <div class="seller-preview-video-wrap" id="preview-video-wrap" hidden>
+              <p><span aria-hidden="true">▶</span> Prévia do vídeo</p>
+              <video class="seller-preview-video" id="preview-video" controls preload="metadata" aria-label="Prévia do vídeo do brinquedo"></video>
+            </div>
             <div class="seller-preview-details">
               <div class="seller-preview-meta"><span id="preview-category">Categoria</span><span id="preview-condition">Conservação</span></div>
               <h3 id="preview-title">O nome do seu brinquedo</h3>
@@ -123,7 +137,7 @@
               <p class="seller-preview-description" id="preview-description">A descrição que você escrever aparecerá aqui para ajudar quem está procurando essa peça.</p>
               <strong class="seller-preview-price" id="preview-price">R$ 0,00</strong>
             </div>
-            <div class="seller-preview-foot"><span aria-hidden="true">✓</span><p>Seus dados de contato não aparecem neste cartão público.</p></div>
+            <div class="seller-preview-foot"><span aria-hidden="true">✓</span><p>Seus dados de contato não aparecem neste cartão público. As mídias selecionadas são prévias locais neste protótipo.</p></div>
           </aside>
         </div>
         <p class="seller-bottom-note"><a href="./index.html">← Voltar à vitrine</a><span>Boas Memórias · cada brinquedo tem uma história.</span></p>
@@ -132,7 +146,7 @@
 
     <footer class="site-footer seller-footer">
       <div class="footer-bottom section-wrap"><span>© <span id="current-year"></span> Boas Memórias</span><span>Feito para quem guarda histórias. <span aria-hidden="true">✳</span></span><a href="./index.html">Voltar à vitrine ↑</a></div>
-      <div class="footer-legal"><div class="section-wrap"><p><strong>Privacidade:</strong> a demonstração não envia nem salva dados. Com a API conectada, conta e anúncio são processados pelo servidor; o formulário não solicita endereço residencial completo.</p></div></div>
+      <div class="footer-legal"><div class="section-wrap"><p><strong>Privacidade:</strong> a demonstração não envia nem salva dados ou arquivos. Para armazenar anúncios e mídias, o servidor e um serviço de armazenamento precisam ser configurados; o formulário não solicita endereço residencial completo.</p></div></div>
     </footer>
   </body>
 </html>
