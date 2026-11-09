@@ -85,6 +85,31 @@
           </form>
         </section>
 
+        <section class="seller-profile-card" aria-labelledby="seller-public-profile-title">
+          <div class="seller-card-heading">
+            <div><p class="eyebrow"><span class="eyebrow-line"></span> Perfil do vendedor</p><h2 id="seller-public-profile-title">Apresente-se com transparência</h2><p>Este perfil aparece junto aos seus anúncios. Informe apenas contatos e redes que deseja tornar públicos.</p></div>
+          </div>
+          <form class="seller-profile-form" id="seller-profile-form">
+            <label class="seller-field seller-field-wide" for="seller-bio">Resumo sobre você <span class="required-mark">*</span><textarea id="seller-bio" name="bio" rows="4" minlength="30" maxlength="700" required placeholder="Conte há quanto tempo coleciona, o que vende e como cuida das peças."></textarea><span class="seller-hint">De 30 a 700 caracteres. Não inclua endereço residencial.</span></label>
+            <label class="seller-field" for="seller-whatsapp">WhatsApp público <span class="required-mark">*</span><input id="seller-whatsapp" name="whatsapp" type="tel" inputmode="tel" autocomplete="tel" pattern="[+0-9() .-]{10,24}" required placeholder="(11) 99999-9999" /><span class="seller-hint">Este número será exibido no perfil público.</span></label>
+            <div class="seller-profile-socials">
+              <p class="seller-field seller-field-wide">Redes sociais <span class="required-mark">*</span><span class="seller-hint">Informe pelo menos uma e inclua todas as redes que usa para vender ou colecionar.</span></p>
+              <label class="seller-field" for="seller-instagram">Instagram<input id="seller-instagram" name="instagramUrl" type="url" inputmode="url" maxlength="500" placeholder="https://instagram.com/usuario" /></label>
+              <label class="seller-field" for="seller-facebook">Facebook<input id="seller-facebook" name="facebookUrl" type="url" inputmode="url" maxlength="500" placeholder="https://facebook.com/usuario" /></label>
+              <label class="seller-field" for="seller-tiktok">TikTok<input id="seller-tiktok" name="tiktokUrl" type="url" inputmode="url" maxlength="500" placeholder="https://tiktok.com/@usuario" /></label>
+              <label class="seller-field" for="seller-youtube">YouTube<input id="seller-youtube" name="youtubeUrl" type="url" inputmode="url" maxlength="500" placeholder="https://youtube.com/@canal" /></label>
+              <label class="seller-field" for="seller-x">X<input id="seller-x" name="xUrl" type="url" inputmode="url" maxlength="500" placeholder="https://x.com/usuario" /></label>
+              <label class="seller-field" for="seller-linkedin">LinkedIn<input id="seller-linkedin" name="linkedinUrl" type="url" inputmode="url" maxlength="500" placeholder="https://linkedin.com/in/usuario" /></label>
+              <label class="seller-field seller-field-wide" for="seller-other-socials">Outras redes sociais<textarea id="seller-other-socials" name="otherSocialUrls" rows="3" maxlength="2000" placeholder="https://...&#10;https://... (um link por linha)"></textarea><span class="seller-hint">Cole vários links HTTPS, um por linha, para incluir redes ainda não listadas.</span></label>
+              <label class="seller-field seller-field-wide" for="seller-website">Site pessoal<input id="seller-website" name="websiteUrl" type="url" inputmode="url" maxlength="500" placeholder="https://seusite.com.br" /></label>
+            </div>
+            <label class="seller-consent seller-field-wide"><input id="seller-profile-consent" type="checkbox" name="publicContactConsent" required /><span>Autorizo a exibição pública do meu nome, cidade/UF, resumo, WhatsApp e links informados neste perfil.</span></label>
+            <p class="seller-privacy-note seller-field-wide">E-mail, senha, telefone privado e endereço residencial completo não são exibidos. O WhatsApp e os links acima ficam públicos somente com esta autorização.</p>
+            <button class="button button-dark seller-field-wide" type="submit" id="seller-profile-submit">Salvar perfil público <span aria-hidden="true">↗</span></button>
+            <p class="seller-message seller-field-wide" id="seller-profile-message" role="status" aria-live="polite"></p>
+          </form>
+        </section>
+
         <div class="seller-workspace">
           <section class="seller-form-card" aria-labelledby="product-form-title">
             <div class="seller-card-heading">
