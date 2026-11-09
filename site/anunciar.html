@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="pt-BR" data-api-base="">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#183d34" />
+    <meta name="description" content="Cadastre seu brinquedo antigo na Boas Memórias com descrição, conservação, preço e prévia do anúncio." />
+    <title>Anunciar um brinquedo — Boas Memórias</title>
+    <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./src/css/style.css" />
+    <script defer src="./src/js/seller.js"></script>
+  </head>
+  <body class="seller-page">
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+    <div class="announcement" role="note">
+      <span>Brinquedos com história merecem uma nova aventura.</span>
+      <a href="./index.html#como-funciona">Como funciona <span aria-hidden="true">↗</span></a>
+    </div>
+    <header class="site-header">
+      <div class="header-inner">
+        <button class="icon-button menu-toggle" id="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="primary-nav">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+        </button>
+        <a class="brand" href="./index.html" aria-label="Boas Memórias, início">
+          <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 38 38"><path d="M19 3.5 22.8 14l11.1-3.4-6.7 9.6 8.4 7.9-11.4-.2L19 38l-5.2-10.1-11.4.2 8.4-7.9-6.7-9.6L15.2 14 19 3.5Z" fill="currentColor"/><circle cx="19" cy="21" r="4.4" fill="#f5f0e5"/></svg></span>
+          <span class="brand-name">boas<span>memórias</span></span>
+        </a>
+        <nav class="primary-nav" id="primary-nav" aria-label="Navegação principal">
+          <a href="./index.html#catalogo">Explorar brinquedos</a>
+          <a href="./index.html#como-funciona">Como funciona</a>
+          <a href="./anunciar.html" aria-current="page">Quero vender</a>
+        </nav>
+        <div class="header-actions"><a class="text-button seller-back-link" href="./index.html">Voltar à vitrine</a></div>
+      </div>
+    </header>
+
+    <main id="conteudo" class="seller-main">
+      <div class="seller-container">
+        <a class="seller-breadcrumb" href="./index.html"><span aria-hidden="true">←</span> Início</a>
+        <header class="seller-intro">
+          <p class="eyebrow"><span class="eyebrow-line"></span> Para quem vende</p>
+          <h1>Uma nova história<br />começa com <em>seu anúncio.</em></h1>
+          <p>Conte o que torna sua peça especial. A prévia acompanha o preenchimento para você revisar cada detalhe antes de publicar.</p>
+        </header>
+
+        <div class="seller-notice is-demo" id="api-notice" role="status" aria-live="polite">
+          <span class="seller-notice-icon" aria-hidden="true">ⓘ</span>
+          <div><strong>Prévia de demonstração</strong><p>A página ainda não está conectada à API. Você pode organizar o anúncio e conferir a prévia; nada será enviado ou salvo até a API Java e o PostgreSQL serem hospedados e conectados.</p></div>
+        </div>
+
+        <section class="seller-auth-card" id="seller-auth" aria-labelledby="seller-auth-title" hidden>
+          <div class="seller-card-heading">
+            <div><p class="eyebrow"><span class="eyebrow-line"></span> Acesso seguro</p><h2 id="seller-auth-title">Entre para publicar</h2><p>O anúncio fica vinculado à sua conta; seu telefone e endereço não aparecem no anúncio público.</p></div>
+          </div>
+          <div class="seller-auth-summary" id="seller-auth-summary" role="status" hidden>
+            <span class="auth-check" aria-hidden="true">✓</span>
+            <span id="seller-auth-name">Conta conectada</span>
+            <button class="text-button" id="seller-logout" type="button">Trocar conta</button>
+          </div>
+          <div class="seller-auth-tabs" id="seller-auth-tabs" role="tablist" aria-label="Acesso do vendedor">
+            <button class="seller-auth-tab is-active" id="seller-register-tab" type="button" role="tab" aria-selected="true" aria-controls="seller-register-form" data-auth-tab="register">Criar conta</button>
+            <button class="seller-auth-tab" id="seller-login-tab" type="button" role="tab" aria-selected="false" aria-controls="seller-login-form" data-auth-tab="login">Já tenho conta</button>
+          </div>
+          <form class="seller-auth-form" id="seller-register-form">
+            <label class="seller-field seller-field-wide" for="seller-name">Nome completo<input id="seller-name" name="name" autocomplete="name" required minlength="2" maxlength="100" placeholder="Como podemos te chamar?" /></label>
+            <label class="seller-field" for="seller-email">E-mail<input id="seller-email" name="email" autocomplete="email" type="email" required maxlength="254" placeholder="voce@email.com" /></label>
+            <label class="seller-field" for="seller-phone">Celular<input id="seller-phone" name="phone" autocomplete="tel" type="tel" required inputmode="tel" pattern="[+0-9() .-]{10,24}" placeholder="(11) 99999-9999" /></label>
+            <label class="seller-field" for="seller-state">Estado<select id="seller-state" name="state" autocomplete="address-level1" required><option value="">Selecione a UF</option></select></label>
+            <label class="seller-field" for="seller-city">Cidade<input id="seller-city" name="city" autocomplete="address-level2" required maxlength="100" placeholder="Sua cidade" /></label>
+            <label class="seller-field" for="seller-password">Senha<input id="seller-password" name="password" autocomplete="new-password" type="password" required minlength="10" maxlength="72" placeholder="Pelo menos 10 caracteres" /></label>
+            <label class="seller-field" for="seller-confirm-password">Confirmar senha<input id="seller-confirm-password" name="confirmPassword" autocomplete="new-password" type="password" required minlength="10" maxlength="72" placeholder="Digite novamente" /></label>
+            <details class="seller-privacy seller-field-wide"><summary>Como usamos seus dados</summary><p>Nome, e-mail, celular e cidade/UF ajudam a criar e proteger sua conta. Telefone e localização não aparecem no anúncio público. A senha é protegida como hash no servidor. O endereço residencial completo não é solicitado.</p></details>
+            <label class="seller-consent seller-field-wide"><input type="checkbox" name="consent" required /><span>Li o aviso de privacidade e aceito o uso dos dados para criar minha conta.</span></label>
+            <button class="button button-dark seller-field-wide" type="submit">Criar conta e continuar <span aria-hidden="true">↗</span></button>
+            <p class="seller-message seller-field-wide" id="seller-register-message" role="status" aria-live="polite"></p>
+          </form>
+          <form class="seller-auth-form" id="seller-login-form" hidden>
+            <label class="seller-field seller-field-wide" for="seller-login-email">E-mail<input id="seller-login-email" name="email" autocomplete="email" type="email" required maxlength="254" placeholder="voce@email.com" /></label>
+            <label class="seller-field seller-field-wide" for="seller-login-password">Senha<input id="seller-login-password" name="password" autocomplete="current-password" type="password" required maxlength="72" placeholder="Sua senha" /></label>
+            <button class="button button-dark seller-field-wide" type="submit">Entrar e continuar <span aria-hidden="true">↗</span></button>
+            <p class="seller-message seller-field-wide" id="seller-login-message" role="status" aria-live="polite"></p>
+          </form>
+        </section>
+
+        <div class="seller-workspace">
+          <section class="seller-form-card" aria-labelledby="product-form-title">
+            <div class="seller-card-heading">
+              <div><p class="eyebrow"><span class="eyebrow-line"></span> Seu anúncio</p><h2 id="product-form-title">Detalhes do brinquedo</h2><p>Campos obrigatórios estão marcados. Uma descrição honesta ajuda a criar confiança.</p></div>
+              <span class="seller-step">01 <span>de 01</span></span>
+            </div>
+            <form class="seller-product-form" id="product-form">
+              <label class="seller-field seller-field-wide" for="product-title">Nome do brinquedo <span class="required-mark">*</span><input id="product-title" name="title" required minlength="2" maxlength="100" placeholder="Ex.: carrinho de coleção vermelho" autocomplete="off" /><span class="seller-hint">Use o nome pelo qual colecionadores reconhecem a peça.</span></label>
+              <div class="seller-form-row">
+                <label class="seller-field" for="product-category">Categoria <span class="required-mark">*</span><select id="product-category" name="category" required><option value="">Selecione</option><option value="CARRINHOS">Carrinhos</option><option value="BONECAS">Bonecas</option><option value="JOGOS">Jogos e brinquedos</option><option value="OUTROS">Outros</option></select></label>
+                <label class="seller-field" for="product-decade">Década aproximada<input id="product-decade" name="decade" type="number" min="1940" max="2030" step="10" inputmode="numeric" placeholder="Ex.: 1980" /><span class="seller-hint">Opcional; use uma década como 1980.</span></label>
+              </div>
+              <div class="seller-form-row">
+                <label class="seller-field" for="product-condition">Conservação <span class="required-mark">*</span><select id="product-condition" name="condition" required><option value="">Selecione</option><option value="EXCELENTE">Excelente</option><option value="MUITO_BOA">Muito boa</option><option value="BOA">Boa</option><option value="COM_MARCAS_DO_TEMPO">Com marcas do tempo</option></select></label>
+                <label class="seller-field" for="product-price">Preço (R$) <span class="required-mark">*</span><div class="seller-price-input"><span aria-hidden="true">R$</span><input id="product-price" name="price" type="number" min="1" max="1000000" step="0.01" inputmode="decimal" required placeholder="0,00" /></div><span class="seller-hint">Entre R$ 1,00 e R$ 1.000.000,00.</span></label>
+              </div>
+              <label class="seller-field seller-field-wide" for="product-description">História e detalhes <span class="required-mark">*</span><textarea id="product-description" name="description" rows="5" minlength="20" maxlength="1200" required placeholder="Descreva materiais, marcas, peças que acompanham e qualquer sinal do tempo. De 20 a 1.200 caracteres."></textarea><span class="seller-counter"><span id="description-count">0</span> / 1.200 caracteres</span></label>
+              <label class="seller-field seller-field-wide" for="product-image-url">Link público HTTPS da foto <span class="seller-optional">opcional</span><input id="product-image-url" name="imageUrl" type="url" maxlength="500" placeholder="https://exemplo.com/foto-do-brinquedo.jpg" autocomplete="url" /><span class="seller-hint">O protótipo aceita o endereço público da imagem; envio de arquivos ainda não está disponível.</span></label>
+              <div class="seller-guidance seller-field-wide"><span aria-hidden="true">✳</span><p><strong>Antes de publicar</strong>Confira a conservação, mostre defeitos com clareza e não inclua telefone, e-mail ou endereço na descrição.</p></div>
+              <button class="button button-dark seller-submit seller-field-wide" id="product-submit" type="submit">Preparar prévia <span aria-hidden="true">↗</span></button>
+              <p class="seller-message seller-field-wide" id="product-message" role="status" aria-live="polite"></p>
+            </form>
+          </section>
+
+          <aside class="seller-preview-card" aria-labelledby="preview-title-heading">
+            <div class="seller-preview-top"><p class="eyebrow"><span class="eyebrow-line"></span> Como vai aparecer</p><span class="preview-live"><span aria-hidden="true"></span> Prévia ao vivo</span></div>
+            <div class="seller-preview-media" id="preview-media">
+              <div class="seller-preview-placeholder" id="preview-placeholder" aria-hidden="true"><span>✳</span><svg viewBox="0 0 220 150"><ellipse cx="110" cy="130" rx="77" ry="8" fill="#284338" opacity=".12"/><path d="M36 96c5-14 16-22 31-26l20-28c7-9 16-14 29-14h23c12 0 21 5 29 16l17 24c11 3 17 11 18 21v14H37V96Z" fill="#b6553c"/><circle cx="72" cy="112" r="17" fill="#254239"/><circle cx="166" cy="112" r="17" fill="#254239"/><circle cx="72" cy="112" r="8" fill="#e5d3b5"/><circle cx="166" cy="112" r="8" fill="#e5d3b5"/></svg><small>Uma peça com história</small></div>
+              <img class="seller-preview-image" id="preview-image" alt="Prévia da foto do brinquedo" hidden />
+              <span class="seller-preview-badge">Novo anúncio</span>
+            </div>
+            <div class="seller-preview-details">
+              <div class="seller-preview-meta"><span id="preview-category">Categoria</span><span id="preview-condition">Conservação</span></div>
+              <h3 id="preview-title">O nome do seu brinquedo</h3>
+              <p class="seller-preview-decade" id="preview-decade">Década não informada</p>
+              <p class="seller-preview-description" id="preview-description">A descrição que você escrever aparecerá aqui para ajudar quem está procurando essa peça.</p>
+              <strong class="seller-preview-price" id="preview-price">R$ 0,00</strong>
+            </div>
+            <div class="seller-preview-foot"><span aria-hidden="true">✓</span><p>Seus dados de contato não aparecem neste cartão público.</p></div>
+          </aside>
+        </div>
+        <p class="seller-bottom-note"><a href="./index.html">← Voltar à vitrine</a><span>Boas Memórias · cada brinquedo tem uma história.</span></p>
+      </div>
+    </main>
+
+    <footer class="site-footer seller-footer">
+      <div class="footer-bottom section-wrap"><span>© <span id="current-year"></span> Boas Memórias</span><span>Feito para quem guarda histórias. <span aria-hidden="true">✳</span></span><a href="./index.html">Voltar à vitrine ↑</a></div>
+      <div class="footer-legal"><div class="section-wrap"><p><strong>Privacidade:</strong> a demonstração não envia nem salva dados. Com a API conectada, conta e anúncio são processados pelo servidor; o formulário não solicita endereço residencial completo.</p></div></div>
+    </footer>
+  </body>
+</html>
