@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="pt-BR" data-api-base="">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#183d34" />
+    <meta name="description" content="Preencha o perfil público de vendedor da Boas Memórias." />
+    <title>Dados do vendedor — Boas Memórias</title>
+    <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./src/css/style.css" />
+    <script defer src="./src/js/seller-profile-form.js"></script>
+  </head>  <body class="seller-page seller-profile-edit-page">
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>    <div class="announcement" role="note"><span>Brinquedos com história merecem uma nova aventura.</span><a href="./index.html#catalogo">Explorar brinquedos <span aria-hidden="true">↗</span></a></div>
+    <header class="site-header">
+      <div class="header-inner">
+        <button class="icon-button menu-toggle" id="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="primary-nav"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg></button>
+        <a class="brand" href="./index.html" aria-label="Boas Memórias, início"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 38 38"><path d="M19 3.5 22.8 14l11.1-3.4-6.7 9.6 8.4 7.9-11.4-.2L19 38l-5.2-10.1-11.4.2 8.4-7.9-6.7-9.6L15.2 14 19 3.5Z" fill="currentColor"/><circle cx="19" cy="21" r="4.4" fill="#f5f0e5"/></svg></span><span class="brand-name">boas<span>memórias</span></span></a>
+        <nav class="primary-nav" id="primary-nav" aria-label="Navegação principal"><a href="./index.html#catalogo">Explorar brinquedos</a><a href="./cadastro-vendedor.html">Cadastro do vendedor</a><a href="./dados-vendedor.html" aria-current="page">Dados do vendedor</a><a href="./anunciar.html">Anunciar produto</a></nav>
+        <div class="header-actions"><a class="text-button" href="./index.html#catalogo">Voltar à vitrine</a></div>
+      </div>
+    </header>    <main id="conteudo" class="seller-main">
+      <div class="seller-container">
+        <a class="seller-breadcrumb" href="./index.html#catalogo"><span aria-hidden="true">←</span> Explorar brinquedos</a>
+        <header class="seller-intro"><p class="eyebrow"><span class="eyebrow-line"></span> Dados em página separada</p><h1>Apresente seu espaço<br />com <em>transparência.</em></h1><p>Preencha aqui o resumo, WhatsApp e redes sociais que deseja tornar públicos. Estes dados aparecem no seu perfil de vendedor, separado do cadastro da conta e dos anúncios.</p></header>
+        <div class="seller-notice is-demo" id="api-notice" role="status" aria-live="polite"><span class="seller-notice-icon" aria-hidden="true">ⓘ</span><div><strong>Perfil em demonstração</strong><p>A API ainda não está conectada. Nenhum dado será salvo; não informe dados reais até o cadastro estar ativado.</p></div></div>
+        <section class="seller-auth-card seller-profile-access" aria-labelledby="profile-access-title"><div class="seller-card-heading"><div><p class="eyebrow"><span class="eyebrow-line"></span> Acesso da conta</p><h2 id="profile-access-title">Conecte sua conta para salvar</h2><p id="profile-access-message" role="status" aria-live="polite">Entre ou crie uma conta na página separada para editar seu perfil.</p><a class="button button-dark" id="profile-access-link" href="./cadastro-vendedor.html?modo=login">Entrar ou criar conta <span aria-hidden="true">↗</span></a></div></div></section>
+        <section class="seller-profile-card" id="seller-profile-card" aria-labelledby="seller-public-profile-title">
+          <div class="seller-card-heading">
+            <div><p class="eyebrow"><span class="eyebrow-line"></span> Perfil do vendedor</p><h2 id="seller-public-profile-title">Apresente-se com transparência</h2><p>Este perfil aparece junto aos seus anúncios. Informe apenas contatos e redes que deseja tornar públicos.</p></div>
+          </div>
+          <form class="seller-profile-form" id="seller-profile-form">
+            <label class="seller-field seller-field-wide" for="seller-bio">Resumo sobre você <span class="required-mark">*</span><textarea id="seller-bio" name="bio" rows="4" minlength="30" maxlength="700" required placeholder="Conte há quanto tempo coleciona, o que vende e como cuida das peças."></textarea><span class="seller-hint">De 30 a 700 caracteres. Não inclua endereço residencial.</span></label>
+            <label class="seller-field" for="seller-whatsapp">WhatsApp público <span class="required-mark">*</span><input id="seller-whatsapp" name="whatsapp" type="tel" inputmode="tel" autocomplete="tel" pattern="[+0-9() .-]{10,24}" required placeholder="(11) 99999-9999" /><span class="seller-hint">Este número será exibido no perfil público.</span></label>
+            <div class="seller-profile-socials">
+              <p class="seller-field seller-field-wide">Redes sociais <span class="required-mark">*</span><span class="seller-hint">Informe pelo menos uma e inclua todas as redes que usa para vender ou colecionar.</span></p>
+              <label class="seller-field" for="seller-instagram">Instagram<input id="seller-instagram" name="instagramUrl" type="url" inputmode="url" maxlength="500" placeholder="https://instagram.com/usuario" /></label>
+              <label class="seller-field" for="seller-facebook">Facebook<input id="seller-facebook" name="facebookUrl" type="url" inputmode="url" maxlength="500" placeholder="https://facebook.com/usuario" /></label>
+              <label class="seller-field" for="seller-tiktok">TikTok<input id="seller-tiktok" name="tiktokUrl" type="url" inputmode="url" maxlength="500" placeholder="https://tiktok.com/@usuario" /></label>
+              <label class="seller-field" for="seller-youtube">YouTube<input id="seller-youtube" name="youtubeUrl" type="url" inputmode="url" maxlength="500" placeholder="https://youtube.com/@canal" /></label>
+              <label class="seller-field" for="seller-x">X<input id="seller-x" name="xUrl" type="url" inputmode="url" maxlength="500" placeholder="https://x.com/usuario" /></label>
+              <label class="seller-field" for="seller-linkedin">LinkedIn<input id="seller-linkedin" name="linkedinUrl" type="url" inputmode="url" maxlength="500" placeholder="https://linkedin.com/in/usuario" /></label>
+              <label class="seller-field seller-field-wide" for="seller-other-socials">Outras redes sociais<textarea id="seller-other-socials" name="otherSocialUrls" rows="3" maxlength="2000" placeholder="https://...&#10;https://... (um link por linha)"></textarea><span class="seller-hint">Cole vários links HTTPS, um por linha, para incluir redes ainda não listadas.</span></label>
+              <label class="seller-field seller-field-wide" for="seller-website">Site pessoal<input id="seller-website" name="websiteUrl" type="url" inputmode="url" maxlength="500" placeholder="https://seusite.com.br" /></label>
+            </div>
+            <label class="seller-consent seller-field-wide"><input id="seller-profile-consent" type="checkbox" name="publicContactConsent" required /><span>Autorizo a exibição pública do meu nome, cidade/UF, resumo, WhatsApp e links informados neste perfil.</span></label>
+            <p class="seller-privacy-note seller-field-wide">E-mail, senha, telefone privado e endereço residencial completo não são exibidos. O WhatsApp e os links acima ficam públicos somente com esta autorização.</p>
+            <button class="button button-dark seller-field-wide" type="submit" id="seller-profile-submit">Salvar perfil público <span aria-hidden="true">↗</span></button>
+            <p class="seller-message seller-field-wide" id="seller-profile-message" role="status" aria-live="polite"></p>
+          </form>
+        </section>
+        <section class="seller-next-step" id="seller-next-step" aria-labelledby="seller-next-title" hidden>
+          <div><p class="eyebrow"><span class="eyebrow-line"></span> Próxima etapa</p><h2 id="seller-next-title">Seu perfil está pronto.</h2><p>Agora cadastre cada brinquedo em uma página própria. Os dados do seu perfil continuam separados dos anúncios.</p></div>
+          <a class="button button-dark" href="./anunciar.html">Cadastrar um produto <span aria-hidden="true">↗</span></a>
+        </section>
+        <p class="seller-bottom-note"><a href="./index.html#catalogo">← Voltar à vitrine</a><span>Boas Memórias · cada brinquedo tem uma história.</span></p>
+      </div>
+    </main>
+    <footer class="site-footer seller-footer">
+      <div class="footer-bottom section-wrap"><span>© <span id="current-year"></span> Boas Memórias</span><span>Feito para quem guarda histórias. <span aria-hidden="true">✳</span></span><a href="./index.html#catalogo">Voltar à vitrine ↑</a></div>
+      <div class="footer-legal"><div class="section-wrap"><p><strong>Privacidade:</strong> Os dados de conta e os contatos privados não aparecem nos anúncios. O vendedor escolhe quais informações deseja divulgar no perfil.</p></div></div>
+    </footer>
+  </body>
+</html>

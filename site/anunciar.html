@@ -31,7 +31,7 @@
         <nav class="primary-nav" id="primary-nav" aria-label="Navegação principal">
           <a href="./index.html#catalogo">Explorar brinquedos</a>
           <a href="./index.html#como-funciona">Como funciona</a>
-          <a href="./anunciar.html" aria-current="page">Quero vender</a>
+          <a href="./cadastro-vendedor.html">Cadastro do vendedor</a><a href="./dados-vendedor.html">Dados do vendedor</a><a href="./anunciar.html" aria-current="page">Anunciar produto</a>
         </nav>
         <div class="header-actions"><a class="text-button seller-back-link" href="./index.html">Voltar à vitrine</a></div>
       </div>
@@ -42,8 +42,8 @@
         <a class="seller-breadcrumb" href="./index.html"><span aria-hidden="true">←</span> Início</a>
         <header class="seller-intro">
           <p class="eyebrow"><span class="eyebrow-line"></span> Para quem vende</p>
-          <h1>Uma nova história<br />começa com <em>seu anúncio.</em></h1>
-          <p>Conte o que torna sua peça especial. A prévia acompanha o preenchimento para você revisar cada detalhe antes de publicar.</p>
+          <h1>Cadastre uma peça<br />para <em>novas memórias.</em></h1>
+          <p>Preencha os detalhes do brinquedo e revise a prévia. Seus dados de vendedor são gerenciados separadamente na página de cadastro.</p>
         </header>
 
         <div class="seller-notice is-demo" id="api-notice" role="status" aria-live="polite">
@@ -51,63 +51,10 @@
           <div><strong>Prévia de demonstração</strong><p>A página ainda não está conectada ao servidor. Você pode selecionar fotos e vídeo e conferir as prévias; os arquivos ficam apenas neste navegador até a API e o armazenamento de mídia serem configurados.</p></div>
         </div>
 
-        <section class="seller-auth-card" id="seller-auth" aria-labelledby="seller-auth-title" hidden>
+        <section class="seller-auth-card seller-account-status" aria-labelledby="seller-access-title">
           <div class="seller-card-heading">
-            <div><p class="eyebrow"><span class="eyebrow-line"></span> Acesso seguro</p><h2 id="seller-auth-title">Entre para publicar</h2><p>O anúncio fica vinculado à sua conta; seu telefone e endereço não aparecem no anúncio público.</p></div>
+            <div><p class="eyebrow"><span class="eyebrow-line"></span> Acesso do vendedor</p><h2 id="seller-access-title">Seus dados ficam em uma página separada</h2><p id="seller-access-message" role="status" aria-live="polite">Cadastre-se ou entre e complete seu perfil antes de publicar. Nome, localização e contatos não são repetidos na vitrine dos produtos.</p><a class="button button-dark" id="seller-access-link" href="./cadastro-vendedor.html?next=anunciar.html">Cadastrar-se ou atualizar meus dados <span aria-hidden="true">↗</span></a></div>
           </div>
-          <div class="seller-auth-summary" id="seller-auth-summary" role="status" hidden>
-            <span class="auth-check" aria-hidden="true">✓</span>
-            <span id="seller-auth-name">Conta conectada</span>
-            <button class="text-button" id="seller-logout" type="button">Trocar conta</button>
-          </div>
-          <div class="seller-auth-tabs" id="seller-auth-tabs" role="tablist" aria-label="Acesso do vendedor">
-            <button class="seller-auth-tab is-active" id="seller-register-tab" type="button" role="tab" aria-selected="true" aria-controls="seller-register-form" data-auth-tab="register">Criar conta</button>
-            <button class="seller-auth-tab" id="seller-login-tab" type="button" role="tab" aria-selected="false" aria-controls="seller-login-form" data-auth-tab="login">Já tenho conta</button>
-          </div>
-          <form class="seller-auth-form" id="seller-register-form">
-            <label class="seller-field seller-field-wide" for="seller-name">Nome completo<input id="seller-name" name="name" autocomplete="name" required minlength="2" maxlength="100" placeholder="Como podemos te chamar?" /></label>
-            <label class="seller-field" for="seller-email">E-mail<input id="seller-email" name="email" autocomplete="email" type="email" required maxlength="254" placeholder="voce@email.com" /></label>
-            <label class="seller-field" for="seller-phone">Celular<input id="seller-phone" name="phone" autocomplete="tel" type="tel" required inputmode="tel" pattern="[+0-9() .-]{10,24}" placeholder="(11) 99999-9999" /></label>
-            <label class="seller-field" for="seller-state">Estado<select id="seller-state" name="state" autocomplete="address-level1" required><option value="">Selecione a UF</option></select></label>
-            <label class="seller-field" for="seller-city">Cidade<input id="seller-city" name="city" autocomplete="address-level2" required maxlength="100" placeholder="Sua cidade" /></label>
-            <label class="seller-field" for="seller-password">Senha<input id="seller-password" name="password" autocomplete="new-password" type="password" required minlength="10" maxlength="72" placeholder="Pelo menos 10 caracteres" /></label>
-            <label class="seller-field" for="seller-confirm-password">Confirmar senha<input id="seller-confirm-password" name="confirmPassword" autocomplete="new-password" type="password" required minlength="10" maxlength="72" placeholder="Digite novamente" /></label>
-            <details class="seller-privacy seller-field-wide"><summary>Como usamos seus dados</summary><p>Nome, e-mail, celular e cidade/UF ajudam a criar e proteger sua conta. Telefone e localização não aparecem no anúncio público. A senha é protegida como hash no servidor. O endereço residencial completo não é solicitado.</p></details>
-            <label class="seller-consent seller-field-wide"><input type="checkbox" name="consent" required /><span>Li o aviso de privacidade e aceito o uso dos dados para criar minha conta.</span></label>
-            <button class="button button-dark seller-field-wide" type="submit">Criar conta e continuar <span aria-hidden="true">↗</span></button>
-            <p class="seller-message seller-field-wide" id="seller-register-message" role="status" aria-live="polite"></p>
-          </form>
-          <form class="seller-auth-form" id="seller-login-form" hidden>
-            <label class="seller-field seller-field-wide" for="seller-login-email">E-mail<input id="seller-login-email" name="email" autocomplete="email" type="email" required maxlength="254" placeholder="voce@email.com" /></label>
-            <label class="seller-field seller-field-wide" for="seller-login-password">Senha<input id="seller-login-password" name="password" autocomplete="current-password" type="password" required maxlength="72" placeholder="Sua senha" /></label>
-            <button class="button button-dark seller-field-wide" type="submit">Entrar e continuar <span aria-hidden="true">↗</span></button>
-            <p class="seller-message seller-field-wide" id="seller-login-message" role="status" aria-live="polite"></p>
-          </form>
-        </section>
-
-        <section class="seller-profile-card" aria-labelledby="seller-public-profile-title">
-          <div class="seller-card-heading">
-            <div><p class="eyebrow"><span class="eyebrow-line"></span> Perfil do vendedor</p><h2 id="seller-public-profile-title">Apresente-se com transparência</h2><p>Este perfil aparece junto aos seus anúncios. Informe apenas contatos e redes que deseja tornar públicos.</p></div>
-          </div>
-          <form class="seller-profile-form" id="seller-profile-form">
-            <label class="seller-field seller-field-wide" for="seller-bio">Resumo sobre você <span class="required-mark">*</span><textarea id="seller-bio" name="bio" rows="4" minlength="30" maxlength="700" required placeholder="Conte há quanto tempo coleciona, o que vende e como cuida das peças."></textarea><span class="seller-hint">De 30 a 700 caracteres. Não inclua endereço residencial.</span></label>
-            <label class="seller-field" for="seller-whatsapp">WhatsApp público <span class="required-mark">*</span><input id="seller-whatsapp" name="whatsapp" type="tel" inputmode="tel" autocomplete="tel" pattern="[+0-9() .-]{10,24}" required placeholder="(11) 99999-9999" /><span class="seller-hint">Este número será exibido no perfil público.</span></label>
-            <div class="seller-profile-socials">
-              <p class="seller-field seller-field-wide">Redes sociais <span class="required-mark">*</span><span class="seller-hint">Informe pelo menos uma e inclua todas as redes que usa para vender ou colecionar.</span></p>
-              <label class="seller-field" for="seller-instagram">Instagram<input id="seller-instagram" name="instagramUrl" type="url" inputmode="url" maxlength="500" placeholder="https://instagram.com/usuario" /></label>
-              <label class="seller-field" for="seller-facebook">Facebook<input id="seller-facebook" name="facebookUrl" type="url" inputmode="url" maxlength="500" placeholder="https://facebook.com/usuario" /></label>
-              <label class="seller-field" for="seller-tiktok">TikTok<input id="seller-tiktok" name="tiktokUrl" type="url" inputmode="url" maxlength="500" placeholder="https://tiktok.com/@usuario" /></label>
-              <label class="seller-field" for="seller-youtube">YouTube<input id="seller-youtube" name="youtubeUrl" type="url" inputmode="url" maxlength="500" placeholder="https://youtube.com/@canal" /></label>
-              <label class="seller-field" for="seller-x">X<input id="seller-x" name="xUrl" type="url" inputmode="url" maxlength="500" placeholder="https://x.com/usuario" /></label>
-              <label class="seller-field" for="seller-linkedin">LinkedIn<input id="seller-linkedin" name="linkedinUrl" type="url" inputmode="url" maxlength="500" placeholder="https://linkedin.com/in/usuario" /></label>
-              <label class="seller-field seller-field-wide" for="seller-other-socials">Outras redes sociais<textarea id="seller-other-socials" name="otherSocialUrls" rows="3" maxlength="2000" placeholder="https://...&#10;https://... (um link por linha)"></textarea><span class="seller-hint">Cole vários links HTTPS, um por linha, para incluir redes ainda não listadas.</span></label>
-              <label class="seller-field seller-field-wide" for="seller-website">Site pessoal<input id="seller-website" name="websiteUrl" type="url" inputmode="url" maxlength="500" placeholder="https://seusite.com.br" /></label>
-            </div>
-            <label class="seller-consent seller-field-wide"><input id="seller-profile-consent" type="checkbox" name="publicContactConsent" required /><span>Autorizo a exibição pública do meu nome, cidade/UF, resumo, WhatsApp e links informados neste perfil.</span></label>
-            <p class="seller-privacy-note seller-field-wide">E-mail, senha, telefone privado e endereço residencial completo não são exibidos. O WhatsApp e os links acima ficam públicos somente com esta autorização.</p>
-            <button class="button button-dark seller-field-wide" type="submit" id="seller-profile-submit">Salvar perfil público <span aria-hidden="true">↗</span></button>
-            <p class="seller-message seller-field-wide" id="seller-profile-message" role="status" aria-live="polite"></p>
-          </form>
         </section>
 
         <div class="seller-workspace">
