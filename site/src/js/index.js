@@ -10,7 +10,6 @@
       return (url.protocol === "https:" || isLocalDevelopment) ? url.href.replace(/\/+$/, "") : "";
     } catch { return ""; }
   })();
-  const stateNames = ["AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"];
   const productSeeds = [
     { id: "carro-classico", title: "Carrinho clássico de corrida", subtitle: "Década de 1980 · metal", category: "Carrinhos", price: 89.9, condition: "Muito boa", badge: "Peça única", tone: "#e9d9bf", type: "car" },
     { id: "boneca-jardim", title: "Boneca jardim de infância", subtitle: "Década de 1970 · vinil", category: "Bonecas", price: 148, condition: "Boa", badge: "Achado raro", tone: "#e9d8d3", type: "doll" },
@@ -38,7 +37,6 @@
   let activeCategory = "Todos";
   let activeQuery = "";
   let activeSort = "featured";
-  let sessionToken = null;
   let toastTimeout;
 
   const categoryMap = { Jogos: "Jogos", Outros: "Jogos" };
@@ -51,17 +49,8 @@
     const imageUrl = safeImageUrl(item.imageUrl);
     const image = imageUrl ? `<img class="product-photo" src="${escapeHtml(imageUrl)}" alt="Foto de ${safeTitle}" loading="lazy" decoding="async" referrerpolicy="no-referrer" />` : "";
     const seller = item.seller;
-    const sellerProfileUrl = seller?.id ? `./vendedor.html?id=${encodeURIComponent(seller.id)}` : "";
-    const ratingCount = Number(seller?.ratingCount) || 0;
-    const ratingAverage = Number(seller?.ratingAverage);
-    const sellerRating = ratingCount > 0 && Number.isFinite(ratingAverage)
-      ? `★ ${ratingAverage.toFixed(1)} · ${ratingCount} ${ratingCount === 1 ? "avaliação" : "avaliações"}`
-      : "Sem avaliações";
-    const sellerCard = sellerProfileUrl ? `<div class="product-seller">
-        <a class="product-seller-name" href="${escapeHtml(sellerProfileUrl)}">Vendido por ${escapeHtml(seller.name)}</a>
-        <span class="product-seller-reputation" aria-label="Reputação do vendedor: ${escapeHtml(sellerRating)}">${escapeHtml(sellerRating)}</span>
-        <span class="product-seller-location">${escapeHtml(seller.city)}, ${escapeHtml(seller.state)}</span>
-      </div>` : "";
+    const sellerProfileUrl = seller?.id ? "./vendedor.html?id=" + encodeURIComponent(seller.id) : "";
+    const sellerProfileLink = sellerProfileUrl ? '<a class="product-seller-link" href="' + escapeHtml(sellerProfileUrl) + '">Ver perfil do vendedor <span aria-hidden="true">↗</span></a>' : "";
     return `<article class="product-card" style="--product-bg:${item.tone}">
       <div class="product-media">
         <span class="product-badge">${item.isDemo ? "Demonstração" : escapeHtml(item.badge)}</span>
@@ -71,7 +60,7 @@
       <div class="product-details">
         <div class="product-meta"><span>${escapeHtml(item.category)}</span><span>${escapeHtml(item.condition)}</span></div>
         <h3 class="product-title">${safeTitle}</h3><p class="product-subtitle">${escapeHtml(item.subtitle)}</p>
-        ${sellerCard}
+        ${sellerProfileLink}
         <div class="product-bottom"><span class="product-price">${money.format(item.price)}</span><button class="add-button" type="button" data-add="${item.id}" aria-label="Adicionar ${safeTitle} à sacola">${cart.has(item.id) ? "Na sacola" : "Adicionar"}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14m-7-7h14"/></svg></button></div>
       </div>
     </article>`;
@@ -93,7 +82,7 @@
     const filtered = products.filter((item) => {
       const category = categoryMap[item.category] || item.category;
       const matchesCategory = activeCategory === "Todos" || category === activeCategory;
-      const content = `${item.title} ${item.subtitle} ${item.category} ${item.condition} ${item.seller?.name || ""} ${item.seller?.city || ""}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      const content = `${item.title} ${item.subtitle} ${item.category} ${item.condition}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
       return matchesCategory && content.includes(normalized);
     });
     if (activeSort === "price-asc") filtered.sort((a, b) => a.price - b.price);
@@ -145,7 +134,6 @@
       ...options,
       headers: {
         "Content-Type": "application/json",
-        ...(sessionToken ? { Authorization: `Bearer ${sessionToken}` } : {}),
         ...(options.headers || {})
       },
       credentials: "omit",
@@ -192,23 +180,6 @@
       $("#demo-note").textContent = "Não foi possível carregar os anúncios da comunidade. A vitrine ilustrativa continua disponível.";
     }
   }
-
-  function switchAccountTab(tab) {
-    const isRegister = tab === "register";
-    $("#account-form").hidden = !isRegister;
-    $("#login-form").hidden = isRegister;
-    $("#register-tab").classList.toggle("is-active", isRegister);
-    $("#login-tab").classList.toggle("is-active", !isRegister);
-    $("#register-tab").setAttribute("aria-selected", String(isRegister));
-    $("#login-tab").setAttribute("aria-selected", String(!isRegister));
-    $("#account-title").textContent = isRegister ? "Crie seu cantinho." : "Bom te ver de novo.";
-    $(".modal-intro", $("#account-dialog")).textContent = isRegister
-      ? "Seu e-mail, telefone e cidade ajudam a conectar você aos seus novos achados."
-      : "Entre na sua conta para conversar sobre um anúncio ou publicar o seu brinquedo.";
-  }
-
-  const stateSelect = $("#account-form select[name='state']");
-  stateNames.forEach((state) => stateSelect.add(new Option(state, state)));
 
   $("#current-year").textContent = String(new Date().getFullYear());
   $("#search-input").addEventListener("input", (event) => {
@@ -276,113 +247,12 @@
     }
   });
 
-  $$('[data-open-account]').forEach((button) => button.addEventListener("click", () => {
-    if (sessionToken && button.classList.contains("account-button")) {
-      sessionToken = null;
-      $$('[data-open-account]').forEach((accountButton) => {
-        accountButton.textContent = accountButton.classList.contains("account-button") ? "Entrar" : "Criar uma conta";
-      });
-      showToast("Você saiu da sua conta.");
-      return;
-    }
-    switchAccountTab(button.dataset.openAccount || "register");
-    openDialog($("#account-dialog"));
-  }));
-  $$("[data-account-tab]").forEach((button) => button.addEventListener("click", () => switchAccountTab(button.dataset.accountTab)));
-  $$('[data-open-listing]').forEach((button) => button.addEventListener("click", () => openDialog($("#listing-dialog"))));
   $("[data-open-cart]").addEventListener("click", () => { renderCart(); openDialog($("#cart-dialog")); });
   $$('[data-close-dialog]').forEach((button) => button.addEventListener("click", () => button.closest("dialog")?.close()));
   $$('dialog').forEach((dialog) => dialog.addEventListener("click", (event) => {
     const rect = dialog.getBoundingClientRect();
     if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close();
   }));
-
-  $("#account-form").addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const form = event.currentTarget;
-    const message = $("#account-message");
-    if (!form.reportValidity()) return;
-    if (!API_BASE_URL) {
-      setMessage(message, "Cadastro em modo de demonstração: a API ainda não está conectada. Seus dados não foram enviados nem armazenados.", "error");
-      return;
-    }
-    const data = Object.fromEntries(new FormData(form).entries());
-    if (data.password !== data.confirmPassword) {
-      setMessage(message, "As senhas não conferem.", "error");
-      return;
-    }
-    delete data.confirmPassword;
-    delete data.consent;
-    const button = form.querySelector("button[type='submit']");
-    button.disabled = true; button.textContent = "Criando conta…";
-    try {
-      const result = await request("/api/auth/register", { method: "POST", body: JSON.stringify(data) });
-      sessionToken = result.accessToken;
-      $$('[data-open-account]').forEach((accountButton) => { accountButton.textContent = "Sair da conta"; });
-      setMessage(message, "Conta criada e entrada realizada. Você já pode publicar um anúncio.", "success");
-      form.reset();
-    } catch (error) { setMessage(message, friendlyError(error, "Não foi possível criar a conta."), "error"); }
-    finally { button.disabled = false; button.innerHTML = 'Criar minha conta <span aria-hidden="true">↗</span>'; }
-  });
-
-  $("#login-form").addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const form = event.currentTarget;
-    const message = $("#login-message");
-    if (!form.reportValidity()) return;
-    if (!API_BASE_URL) {
-      setMessage(message, "A API ainda não está conectada; sua entrada não foi enviada.", "error");
-      return;
-    }
-    const data = Object.fromEntries(new FormData(form).entries());
-    const button = form.querySelector("button[type='submit']");
-    button.disabled = true; button.textContent = "Entrando…";
-    try {
-      const result = await request("/api/auth/login", { method: "POST", body: JSON.stringify(data) });
-      sessionToken = result.accessToken;
-      $$('[data-open-account]').forEach((accountButton) => { accountButton.textContent = "Sair da conta"; });
-      setMessage(message, "Entrada realizada. Você já pode criar um anúncio.", "success");
-      form.reset();
-    } catch (error) { setMessage(message, friendlyError(error, "Não foi possível entrar na conta."), "error"); }
-    finally { button.disabled = false; button.innerHTML = 'Entrar na minha conta <span aria-hidden="true">↗</span>'; }
-  });
-
-  $("#listing-form").addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const form = event.currentTarget;
-    const message = $("#listing-message");
-    if (!form.reportValidity()) return;
-    if (!API_BASE_URL) {
-      setMessage(message, "Anúncio em modo de demonstração: conecte a API da loja para publicar esta peça. Seus dados não foram enviados.", "error");
-      return;
-    }
-    if (!sessionToken) {
-      setMessage(message, "Entre na sua conta para publicar um anúncio.", "error");
-      switchAccountTab("login");
-      openDialog($("#account-dialog"));
-      return;
-    }
-    const values = Object.fromEntries(new FormData(form).entries());
-    const category = { Carrinhos: "CARRINHOS", Bonecas: "BONECAS", Jogos: "JOGOS", Outros: "OUTROS" }[values.category];
-    const condition = values.condition.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().replace(/\s+/g, "_");
-    const payload = {
-      title: values.title.trim(), category, decade: values.decade ? Number(values.decade) : null,
-      condition, price: Number(values.price), description: values.description.trim(), imageUrl: values.imageUrl || null
-    };
-    const button = form.querySelector("button[type='submit']");
-    button.disabled = true; button.textContent = "Publicando…";
-    try {
-      const result = await request("/api/products", { method: "POST", body: JSON.stringify(payload) });
-      const listing = result.product;
-      if (listing) {
-        products.unshift(toLiveListing(listing));
-        renderProducts();
-      }
-      setMessage(message, "Anúncio publicado. Obrigado por passar essa memória adiante.", "success");
-      form.reset();
-    } catch (error) { setMessage(message, friendlyError(error, "Não foi possível publicar o anúncio."), "error"); }
-    finally { button.disabled = false; button.innerHTML = 'Enviar anúncio <span aria-hidden="true">↗</span>'; }
-  });
 
   $("#cart-items").addEventListener("click", (event) => {
     const button = event.target.closest("[data-remove]");

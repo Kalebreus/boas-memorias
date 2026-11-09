@@ -11,20 +11,13 @@
       return (url.protocol === "https:" || isLocalDevelopment) ? url.href.replace(/\/+$/, "") : "";
     } catch { return ""; }
   })();
-  const states = ["AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"];
   const categories = { CARRINHOS: "Carrinhos", BONECAS: "Bonecas", JOGOS: "Jogos e brinquedos", OUTROS: "Outros" };
   const conditions = { EXCELENTE: "Excelente", MUITO_BOA: "Muito boa", BOA: "Boa", COM_MARCAS_DO_TEMPO: "Com marcas do tempo" };
   const money = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
-  const authPanel = $("#seller-auth");
-  const authTabs = $("#seller-auth-tabs");
-  const authSummary = $("#seller-auth-summary");
-  const registerForm = $("#seller-register-form");
-  const loginForm = $("#seller-login-form");
   const productForm = $("#product-form");
-  const sellerProfileForm = $("#seller-profile-form");
-  const sellerProfileMessage = $("#seller-profile-message");
   const notice = $("#api-notice");
   const productMessage = $("#product-message");
+  const sellerAccessMessage = $("#seller-access-message");
   const productButton = $("#product-submit");
   const titleInput = $("#product-title");
   const categoryInput = $("#product-category");
@@ -47,7 +40,7 @@
   const selectedPhotos = [];
   let selectedVideo = null;
   let activePhotoIndex = 0;
-  let accessToken = null;
+  let accessToken = sessionStorage.getItem("bm_seller_access_token");
   let sellerProfileComplete = false;
 
   function message(target, text, kind = "") {
@@ -186,70 +179,10 @@
     return data;
   }
 
-  async function loadSellerProfile() {
-    if (!API_BASE_URL || !accessToken) return;
-    try {
-      const profile = await request("/api/sellers/me");
-      ["bio", "whatsapp", "instagramUrl", "facebookUrl", "tiktokUrl", "youtubeUrl", "xUrl", "linkedinUrl", "otherSocialUrls", "websiteUrl"]
-        .forEach((name) => { sellerProfileForm.elements[name].value = profile[name] || ""; });
-      $("#seller-profile-consent").checked = Boolean(profile.complete);
-      sellerProfileComplete = Boolean(profile.complete);
-      message(sellerProfileMessage, sellerProfileComplete
-        ? "Perfil público salvo. Os dados de contato exibidos são os que você autorizou."
-        : "Complete o perfil público antes de publicar seu primeiro anúncio.");
-    } catch (error) {
-      sellerProfileComplete = false;
-      message(sellerProfileMessage, error.message || "Não foi possível carregar seu perfil público.", "error");
-    }
-  }
-
   function setBusy(form, busy, label) {
     const button = form.querySelector("button[type='submit']");
     button.disabled = busy;
     button.textContent = busy ? label : button.dataset.idleLabel;
-  }
-
-  function switchAuthTab(mode) {
-    const register = mode === "register";
-    registerForm.hidden = !register;
-    loginForm.hidden = register;
-    $("#seller-register-tab").classList.toggle("is-active", register);
-    $("#seller-login-tab").classList.toggle("is-active", !register);
-    $("#seller-register-tab").setAttribute("aria-selected", String(register));
-    $("#seller-login-tab").setAttribute("aria-selected", String(!register));
-  }
-
-  function updateAuthState(user) {
-    authTabs.hidden = true;
-    registerForm.hidden = true;
-    loginForm.hidden = true;
-    authSummary.hidden = false;
-    $("#seller-auth-title").textContent = "Conta conectada";
-    $("#seller-auth-name").textContent = user?.name ? `Olá, ${user.name}. Você já pode publicar.` : "Você já pode publicar este anúncio.";
-    notice.classList.remove("is-demo");
-    notice.classList.add("is-live");
-    notice.querySelector("strong").textContent = "Conta pronta para publicar";
-    notice.querySelector("p").textContent = "Revise os detalhes e publique quando estiver satisfeito. O servidor atual ainda não armazena fotos ou vídeos selecionados.";
-    productButton.dataset.idleLabel = "Publicar anúncio";
-    productButton.textContent = productButton.dataset.idleLabel;
-    loadSellerProfile();
-  }
-
-  function resetAuthState() {
-    accessToken = null;
-    sellerProfileComplete = false;
-    authTabs.hidden = false;
-    authSummary.hidden = true;
-    $("#seller-auth-title").textContent = "Entre para publicar";
-    switchAuthTab("register");
-    notice.classList.remove("is-live");
-    notice.classList.add("is-demo");
-    notice.querySelector("strong").textContent = "Prévia de demonstração";
-    notice.querySelector("p").textContent = "Sua conta foi desconectada. Entre novamente quando quiser publicar. Mídias selecionadas ainda não são enviadas ao servidor.";
-    productButton.dataset.idleLabel = "Entrar para publicar";
-    productButton.textContent = productButton.dataset.idleLabel;
-    sellerProfileForm.reset();
-    message(sellerProfileMessage, "Entre na sua conta para carregar ou atualizar seu perfil público.");
   }
 
   function updatePreview() {
@@ -264,15 +197,6 @@
     $("#description-count").textContent = String(descriptionInput.value.length);
   }
 
-  function showAuthPanel() {
-    authPanel.hidden = false;
-    switchAuthTab("register");
-    authPanel.scrollIntoView({ behavior: "smooth", block: "center" });
-    $("#seller-name").focus({ preventScroll: true });
-  }
-
-  states.forEach((state) => $("#seller-state").add(new Option(state, state)));
-  $("#current-year").textContent = String(new Date().getFullYear());
   [titleInput, categoryInput, decadeInput, conditionInput, priceInput, descriptionInput].forEach((input) => {
     input.addEventListener("input", updatePreview);
     input.addEventListener("change", updatePreview);
@@ -317,100 +241,50 @@
     selectedPhotos.forEach((photo) => URL.revokeObjectURL(photo.url));
     if (selectedVideo) URL.revokeObjectURL(selectedVideo.url);
   });
-  $("#seller-auth-tabs").addEventListener("click", (event) => {
-    const tab = event.target.closest("[data-auth-tab]");
-    if (tab) switchAuthTab(tab.dataset.authTab);
-  });
-  $("#seller-logout").addEventListener("click", resetAuthState);
+  function showRegistrationMessage(text) {
+    message(productMessage, text, "error");
+    const link = document.createElement("a");
+    link.href = "./cadastro-vendedor.html?next=anunciar.html";
+    link.textContent = " Ir para cadastro do vendedor";
+    productMessage.append(link);
+  }
 
   if (!API_BASE_URL) {
-    authPanel.hidden = true;
+    notice.classList.add("is-demo");
+    notice.querySelector("strong").textContent = "Prévia de demonstração";
+    notice.querySelector("p").textContent = "A API ainda não está conectada. O anúncio e as mídias ficam apenas como prévia neste navegador.";
     productButton.dataset.idleLabel = "Preparar prévia";
     productButton.textContent = productButton.dataset.idleLabel;
+    sellerAccessMessage.textContent = "O cadastro do vendedor fica em uma página separada. A demonstração ainda não salva contas ou perfis.";
   } else {
     notice.classList.remove("is-demo");
     notice.classList.add("is-live");
     notice.querySelector("strong").textContent = "Publicação disponível";
-    notice.querySelector("p").textContent = "Entre na sua conta ou crie uma para publicar. A API ainda não recebe fotos ou vídeos; os arquivos selecionados servem apenas para prévia.";
-    authPanel.hidden = false;
-    productButton.dataset.idleLabel = "Entrar para publicar";
+    notice.querySelector("p").textContent = "Anúncios publicados aparecem na vitrine. A API atual ainda não armazena fotos ou vídeos.";
+    productButton.dataset.idleLabel = "Publicar anúncio";
     productButton.textContent = productButton.dataset.idleLabel;
+    if (!accessToken) sellerAccessMessage.textContent = "Entre na sua conta e complete o perfil do vendedor antes de publicar.";
   }
 
-  registerForm.querySelector("button[type='submit']").dataset.idleLabel = "Criar conta e continuar";
-  loginForm.querySelector("button[type='submit']").dataset.idleLabel = "Entrar e continuar";
-  sellerProfileForm.querySelector("button[type='submit']").dataset.idleLabel = "Salvar perfil público";
-  sellerProfileForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    if (!sellerProfileForm.reportValidity()) return;
-    const values = Object.fromEntries(new FormData(sellerProfileForm).entries());
-    if (![values.instagramUrl, values.facebookUrl, values.tiktokUrl, values.youtubeUrl, values.xUrl, values.linkedinUrl, values.otherSocialUrls].some((value) => value.trim())) {
-      message(sellerProfileMessage, "Informe ao menos um perfil social público.", "error");
-      return;
-    }
-    if (!API_BASE_URL) {
-      message(sellerProfileMessage, "Modo de demonstração: o perfil não foi enviado nem salvo. Conecte a API para ativar o cadastro público.", "error");
-      return;
-    }
-    if (!accessToken) {
-      message(sellerProfileMessage, "Entre ou crie uma conta antes de salvar o perfil do vendedor.", "error");
-      showAuthPanel();
-      return;
-    }
-
-    const payload = {
-      bio: values.bio.trim(), whatsapp: values.whatsapp.trim(),
-      instagramUrl: values.instagramUrl.trim(), facebookUrl: values.facebookUrl.trim(),
-      tiktokUrl: values.tiktokUrl.trim(), youtubeUrl: values.youtubeUrl.trim(),
-      xUrl: values.xUrl.trim(), linkedinUrl: values.linkedinUrl.trim(), otherSocialUrls: values.otherSocialUrls.trim(),
-      websiteUrl: values.websiteUrl.trim(), publicContactConsent: Boolean(values.publicContactConsent)
-    };
-    setBusy(sellerProfileForm, true, "Salvando perfil…");
+  async function loadSellerStatus() {
+    if (!API_BASE_URL || !accessToken) return;
     try {
-      const profile = await request("/api/sellers/me/profile", { method: "PUT", body: JSON.stringify(payload) });
+      const profile = await request("/api/sellers/me");
       sellerProfileComplete = Boolean(profile.complete);
-      message(sellerProfileMessage, "Perfil público salvo. Você já pode anunciar com seus dados de transparência.", "success");
+      sellerAccessMessage.textContent = sellerProfileComplete
+        ? "Conta conectada e perfil de vendedor completo. Seus dados continuam na página de cadastro."
+        : "Complete seus dados de vendedor na página separada antes de publicar.";
     } catch (error) {
-      sellerProfileComplete = false;
-      message(sellerProfileMessage, error.message || "Não foi possível salvar o perfil.", "error");
-    } finally { setBusy(sellerProfileForm, false); }
-  });
-  registerForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    if (!registerForm.reportValidity()) return;
-    const data = Object.fromEntries(new FormData(registerForm).entries());
-    if (data.password !== data.confirmPassword) {
-      message($("#seller-register-message"), "As senhas não conferem.", "error");
-      return;
+      if (error.status === 401) {
+        sessionStorage.removeItem("bm_seller_access_token");
+        accessToken = null;
+        sellerAccessMessage.textContent = "Sua sessão terminou. Entre novamente na página de cadastro.";
+      } else {
+        sellerAccessMessage.textContent = error.message || "Não foi possível conferir seu perfil de vendedor.";
+      }
     }
-    delete data.confirmPassword;
-    delete data.consent;
-    setBusy(registerForm, true, "Criando conta…");
-    try {
-      const result = await request("/api/auth/register", { method: "POST", body: JSON.stringify(data) });
-      accessToken = result.accessToken;
-      registerForm.reset();
-      updateAuthState(result.user);
-    } catch (error) {
-      message($("#seller-register-message"), error.message || "Não foi possível criar a conta.", "error");
-    } finally { setBusy(registerForm, false); }
-  });
-
-  loginForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    if (!loginForm.reportValidity()) return;
-    const data = Object.fromEntries(new FormData(loginForm).entries());
-    setBusy(loginForm, true, "Entrando…");
-    try {
-      const result = await request("/api/auth/login", { method: "POST", body: JSON.stringify(data) });
-      accessToken = result.accessToken;
-      loginForm.reset();
-      updateAuthState(result.user);
-    } catch (error) {
-      message($("#seller-login-message"), error.message || "Não foi possível entrar na conta.", "error");
-    } finally { setBusy(loginForm, false); }
-  });
-
+  }
+  loadSellerStatus();
   productForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     if (!productForm.reportValidity()) return;
@@ -424,17 +298,13 @@
       return;
     }
     if (!accessToken) {
-      message(productMessage, "Entre ou crie uma conta para publicar. Seus dados não serão adicionados à descrição do anúncio.", "error");
-      showAuthPanel();
+      showRegistrationMessage("Entre ou cadastre sua conta de vendedor para publicar.");
       return;
     }
     if (!sellerProfileComplete) {
-      message(productMessage, "Salve seu perfil público com resumo, WhatsApp e ao menos uma rede social antes de anunciar.", "error");
-      sellerProfileForm.scrollIntoView({ behavior: "smooth", block: "center" });
-      $("#seller-bio").focus({ preventScroll: true });
+      showRegistrationMessage("Complete seu perfil de vendedor na página separada antes de anunciar.");
       return;
     }
-
     const data = Object.fromEntries(new FormData(productForm).entries());
     const payload = {
       title: data.title.trim(), category: data.category,
@@ -456,9 +326,10 @@
       }
     } catch (error) {
       if (error.status === 401) {
+        sessionStorage.removeItem("bm_seller_access_token");
         accessToken = null;
-        message(productMessage, "Sua sessão terminou. Entre novamente para concluir a publicação.", "error");
-        showAuthPanel();
+        sellerAccessMessage.textContent = "Sua sessão terminou. Entre novamente na página de cadastro.";
+        showRegistrationMessage("Sua sessão terminou. Entre novamente para concluir a publicação.");
       } else {
         message(productMessage, error.message || "Não foi possível publicar o anúncio.", "error");
       }
