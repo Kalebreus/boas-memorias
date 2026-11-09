@@ -147,6 +147,11 @@ h1 em, h2 em { color: var(--gold); font-weight: 500; }
 .product-seller-name:hover { color: var(--terracotta); }
 .product-seller-reputation { color: #92713b; font-size: 9px; }
 .product-seller-location { color: #839087; font-size: 8px; }
+.product-seller-link { display: inline-flex; align-items: center; gap: 5px; color: var(--pine); font-size: 9px; font-weight: 700; }
+.product-seller-link:hover { color: var(--terracotta); }
+.seller-next-step { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-top: 20px; padding: 25px 28px; border: 1px solid #e5e2d9; background: var(--white); box-shadow: 0 12px 30px rgb(28 53 42 / 5%); }
+.seller-next-step h2 { margin: 4px 0 5px; color: var(--pine); font-family: var(--serif); font-size: 25px; font-weight: 500; }
+.seller-next-step p:not(.eyebrow) { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.65; }
 .product-bottom { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 13px; padding-top: 11px; border-top: 1px solid var(--line); }
 .product-price { color: var(--pine); font-size: 13px; font-weight: 700; }
 .add-button { display: inline-flex; align-items: center; gap: 6px; padding: 6px 0 6px 6px; border: 0; background: transparent; color: var(--terracotta); font-size: 9px; font-weight: 700; cursor: pointer; }
