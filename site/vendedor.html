@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="pt-BR" data-api-base="">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#183d34" />
+    <meta name="description" content="Conheça o perfil público de um vendedor da Boas Memórias." />
+    <title>Perfil do vendedor — Boas Memórias</title>
+    <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./src/css/style.css" />
+    <script defer src="./src/js/seller-profile.js"></script>
+  </head>
+  <body class="seller-page public-profile-page">
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+    <div class="announcement" role="note"><span>Brinquedos com história merecem uma nova aventura.</span><a href="./index.html#catalogo">Explorar brinquedos <span aria-hidden="true">↗</span></a></div>
+    <header class="site-header">
+      <div class="header-inner">
+        <button class="icon-button menu-toggle" id="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="primary-nav"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg></button>
+        <a class="brand" href="./index.html" aria-label="Boas Memórias, início"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 38 38"><path d="M19 3.5 22.8 14l11.1-3.4-6.7 9.6 8.4 7.9-11.4-.2L19 38l-5.2-10.1-11.4.2 8.4-7.9-6.7-9.6L15.2 14 19 3.5Z" fill="currentColor"/><circle cx="19" cy="21" r="4.4" fill="#f5f0e5"/></svg></span><span class="brand-name">boas<span>memórias</span></span></a>
+        <nav class="primary-nav" id="primary-nav" aria-label="Navegação principal"><a href="./index.html#catalogo">Explorar brinquedos</a><a href="./index.html#como-funciona">Como funciona</a><a href="./anunciar.html">Quero vender</a></nav>
+        <div class="header-actions"><a class="text-button" href="./index.html#catalogo">Voltar à vitrine</a></div>
+      </div>
+    </header>
+
+    <main id="conteudo" class="seller-main profile-main">
+      <div class="seller-container">
+        <a class="seller-breadcrumb" href="./index.html#catalogo"><span aria-hidden="true">←</span> Explorar brinquedos</a>
+        <header class="seller-intro"><p class="eyebrow"><span class="eyebrow-line"></span> Comunidade Boas Memórias</p><h1>Conheça quem está<br /><em>por trás da peça.</em></h1><p>Confira o resumo, a localização geral e os canais que o vendedor escolheu compartilhar.</p></header>
+        <p class="seller-notice is-demo profile-loading" id="profile-loading" role="status" aria-live="polite">Carregando perfil público…</p>
+        <section class="public-seller-card" id="public-seller-card" aria-labelledby="public-seller-name" hidden>
+          <div class="public-seller-heading">
+            <div class="public-seller-avatar" id="public-seller-avatar" aria-hidden="true"></div>
+            <div><p class="eyebrow"><span class="eyebrow-line"></span> Perfil do vendedor</p><h2 id="public-seller-name"></h2><p class="public-seller-location" id="public-seller-location"></p></div>
+            <div class="seller-rating-card"><span class="seller-rating-stars" id="seller-rating-stars" aria-hidden="true">☆ ☆ ☆ ☆ ☆</span><strong id="seller-rating-value">Sem avaliações</strong><span id="seller-rating-count">A reputação será exibida conforme houver avaliações.</span></div>
+          </div>
+          <div class="public-seller-body">
+            <section aria-labelledby="seller-about-title"><p class="eyebrow"><span class="eyebrow-line"></span> Sobre o vendedor</p><h3 id="seller-about-title">Um pouco da sua história</h3><p class="public-seller-bio" id="public-seller-bio"></p><p class="public-seller-since" id="public-seller-since"></p></section>
+            <section class="public-seller-contact" aria-labelledby="seller-contact-title"><p class="eyebrow"><span class="eyebrow-line"></span> Canais públicos</p><h3 id="seller-contact-title">Fale e conheça mais</h3><a class="button button-dark public-whatsapp" id="public-whatsapp" href="#" target="_blank" rel="noopener noreferrer nofollow"><span aria-hidden="true">◉</span> Conversar pelo WhatsApp</a><div class="public-social-links" id="public-social-links"></div></section>
+          </div>
+          <div class="profile-safety-note"><span aria-hidden="true">ⓘ</span><p><strong>Negocie com cuidado.</strong> O perfil e as avaliações ajudam a conhecer o vendedor, mas não substituem verificação de identidade nem garantem uma negociação segura. Confira a peça e evite pagamentos antecipados fora de plataformas protegidas.</p></div>
+        </section>
+        <section class="public-seller-listings" id="public-seller-listings" aria-labelledby="seller-listings-title" hidden><div class="seller-card-heading"><div><p class="eyebrow"><span class="eyebrow-line"></span> Vitrine do vendedor</p><h2 id="seller-listings-title">Anúncios disponíveis</h2></div></div><div class="profile-listing-grid" id="profile-listing-grid"></div><p class="profile-no-listings" id="profile-no-listings" hidden>Este vendedor ainda não tem anúncios disponíveis.</p></section>
+        <div class="seller-notice is-demo profile-error" id="profile-error" role="status" hidden><span class="seller-notice-icon" aria-hidden="true">ⓘ</span><div><strong>Perfil indisponível</strong><p id="profile-error-message">Não foi possível carregar este perfil.</p><a class="text-link" href="./index.html#catalogo">Voltar para Explorar brinquedos <span aria-hidden="true">↗</span></a></div></div>
+        <p class="seller-bottom-note"><a href="./index.html#catalogo">← Voltar para Explorar brinquedos</a><span>Boas Memórias · cada brinquedo tem uma história.</span></p>
+      </div>
+    </main>
+    <footer class="site-footer seller-footer"><div class="footer-bottom section-wrap"><span>© <span id="current-year"></span> Boas Memórias</span><span>Feito para quem guarda histórias. <span aria-hidden="true">✳</span></span><a href="./index.html">Voltar à vitrine ↑</a></div><div class="footer-legal"><div class="section-wrap"><p><strong>Privacidade:</strong> só são exibidos os dados que o vendedor autorizou para o perfil público. E-mail, senha e endereço residencial completo não aparecem nesta página.</p></div></div></footer>
+  </body>
+</html>
