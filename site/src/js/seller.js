@@ -21,6 +21,8 @@
   const registerForm = $("#seller-register-form");
   const loginForm = $("#seller-login-form");
   const productForm = $("#product-form");
+  const sellerProfileForm = $("#seller-profile-form");
+  const sellerProfileMessage = $("#seller-profile-message");
   const notice = $("#api-notice");
   const productMessage = $("#product-message");
   const productButton = $("#product-submit");
@@ -46,6 +48,7 @@
   let selectedVideo = null;
   let activePhotoIndex = 0;
   let accessToken = null;
+  let sellerProfileComplete = false;
 
   function message(target, text, kind = "") {
     target.textContent = text;
@@ -183,6 +186,23 @@
     return data;
   }
 
+  async function loadSellerProfile() {
+    if (!API_BASE_URL || !accessToken) return;
+    try {
+      const profile = await request("/api/sellers/me");
+      ["bio", "whatsapp", "instagramUrl", "facebookUrl", "tiktokUrl", "youtubeUrl", "xUrl", "linkedinUrl", "otherSocialUrls", "websiteUrl"]
+        .forEach((name) => { sellerProfileForm.elements[name].value = profile[name] || ""; });
+      $("#seller-profile-consent").checked = Boolean(profile.complete);
+      sellerProfileComplete = Boolean(profile.complete);
+      message(sellerProfileMessage, sellerProfileComplete
+        ? "Perfil público salvo. Os dados de contato exibidos são os que você autorizou."
+        : "Complete o perfil público antes de publicar seu primeiro anúncio.");
+    } catch (error) {
+      sellerProfileComplete = false;
+      message(sellerProfileMessage, error.message || "Não foi possível carregar seu perfil público.", "error");
+    }
+  }
+
   function setBusy(form, busy, label) {
     const button = form.querySelector("button[type='submit']");
     button.disabled = busy;
@@ -212,10 +232,12 @@
     notice.querySelector("p").textContent = "Revise os detalhes e publique quando estiver satisfeito. O servidor atual ainda não armazena fotos ou vídeos selecionados.";
     productButton.dataset.idleLabel = "Publicar anúncio";
     productButton.textContent = productButton.dataset.idleLabel;
+    loadSellerProfile();
   }
 
   function resetAuthState() {
     accessToken = null;
+    sellerProfileComplete = false;
     authTabs.hidden = false;
     authSummary.hidden = true;
     $("#seller-auth-title").textContent = "Entre para publicar";
@@ -226,6 +248,8 @@
     notice.querySelector("p").textContent = "Sua conta foi desconectada. Entre novamente quando quiser publicar. Mídias selecionadas ainda não são enviadas ao servidor.";
     productButton.dataset.idleLabel = "Entrar para publicar";
     productButton.textContent = productButton.dataset.idleLabel;
+    sellerProfileForm.reset();
+    message(sellerProfileMessage, "Entre na sua conta para carregar ou atualizar seu perfil público.");
   }
 
   function updatePreview() {
@@ -315,6 +339,42 @@
 
   registerForm.querySelector("button[type='submit']").dataset.idleLabel = "Criar conta e continuar";
   loginForm.querySelector("button[type='submit']").dataset.idleLabel = "Entrar e continuar";
+  sellerProfileForm.querySelector("button[type='submit']").dataset.idleLabel = "Salvar perfil público";
+  sellerProfileForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (!sellerProfileForm.reportValidity()) return;
+    const values = Object.fromEntries(new FormData(sellerProfileForm).entries());
+    if (![values.instagramUrl, values.facebookUrl, values.tiktokUrl, values.youtubeUrl, values.xUrl, values.linkedinUrl, values.otherSocialUrls].some((value) => value.trim())) {
+      message(sellerProfileMessage, "Informe ao menos um perfil social público.", "error");
+      return;
+    }
+    if (!API_BASE_URL) {
+      message(sellerProfileMessage, "Modo de demonstração: o perfil não foi enviado nem salvo. Conecte a API para ativar o cadastro público.", "error");
+      return;
+    }
+    if (!accessToken) {
+      message(sellerProfileMessage, "Entre ou crie uma conta antes de salvar o perfil do vendedor.", "error");
+      showAuthPanel();
+      return;
+    }
+
+    const payload = {
+      bio: values.bio.trim(), whatsapp: values.whatsapp.trim(),
+      instagramUrl: values.instagramUrl.trim(), facebookUrl: values.facebookUrl.trim(),
+      tiktokUrl: values.tiktokUrl.trim(), youtubeUrl: values.youtubeUrl.trim(),
+      xUrl: values.xUrl.trim(), linkedinUrl: values.linkedinUrl.trim(), otherSocialUrls: values.otherSocialUrls.trim(),
+      websiteUrl: values.websiteUrl.trim(), publicContactConsent: Boolean(values.publicContactConsent)
+    };
+    setBusy(sellerProfileForm, true, "Salvando perfil…");
+    try {
+      const profile = await request("/api/sellers/me/profile", { method: "PUT", body: JSON.stringify(payload) });
+      sellerProfileComplete = Boolean(profile.complete);
+      message(sellerProfileMessage, "Perfil público salvo. Você já pode anunciar com seus dados de transparência.", "success");
+    } catch (error) {
+      sellerProfileComplete = false;
+      message(sellerProfileMessage, error.message || "Não foi possível salvar o perfil.", "error");
+    } finally { setBusy(sellerProfileForm, false); }
+  });
   registerForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     if (!registerForm.reportValidity()) return;
@@ -368,6 +428,12 @@
       showAuthPanel();
       return;
     }
+    if (!sellerProfileComplete) {
+      message(productMessage, "Salve seu perfil público com resumo, WhatsApp e ao menos uma rede social antes de anunciar.", "error");
+      sellerProfileForm.scrollIntoView({ behavior: "smooth", block: "center" });
+      $("#seller-bio").focus({ preventScroll: true });
+      return;
+    }
 
     const data = Object.fromEntries(new FormData(productForm).entries());
     const payload = {
@@ -380,6 +446,10 @@
     try {
       const result = await request("/api/products", { method: "POST", body: JSON.stringify(payload) });
       message(productMessage, "Anúncio publicado. Obrigado por passar essa memória adiante.", "success");
+      const catalogLink = document.createElement("a");
+      catalogLink.href = "./index.html#catalogo";
+      catalogLink.textContent = " Ver em Explorar brinquedos";
+      productMessage.append(catalogLink);
       if (result.product?.title) {
         productForm.reset();
         updatePreview();
