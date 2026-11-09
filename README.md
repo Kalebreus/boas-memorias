@@ -46,9 +46,9 @@ boas-memorias/
 
 ## Página para vendedores
 
-Na página `site/anunciar.html`, o vendedor informa nome, categoria, década aproximada, conservação, preço, descrição e, opcionalmente, o link HTTPS de uma foto. O cartão de prévia se atualiza enquanto os campos são preenchidos. O formulário valida os campos e limites aceitos pela API Java; o cadastro é vinculado a uma conta autenticada, e telefone/endereço não são exibidos no anúncio público. O protótipo recebe um link público de imagem, mas ainda não oferece upload de arquivos.
+Na página `site/anunciar.html`, o vendedor informa nome, categoria, década aproximada, conservação, preço e descrição; pode selecionar até 6 fotos JPG/PNG/WebP e 1 vídeo MP4/WebM. O cartão de prévia inclui galeria de fotos selecionáveis e player de vídeo. Cada foto aceita até 10 MB e o vídeo até 50 MB. O formulário valida os campos e limites aceitos pela API Java; o cadastro é vinculado a uma conta autenticada, e telefone/endereço não são exibidos no anúncio público.
 
-Enquanto `data-api-base` estiver vazio, a página só monta a prévia no navegador. Ela avisa que não enviou nem salvou o anúncio. Quando a API estiver hospedada, configure o mesmo valor HTTPS nos atributos `data-api-base` de `site/index.html` e `site/anunciar.html`, além da origem do Pages em `CORS_ALLOWED_ORIGIN` no servidor.
+Enquanto `data-api-base` estiver vazio, a página só monta a prévia no navegador. Arquivos escolhidos usam URLs temporárias locais e não são enviados nem salvos; a API atual também não aceita fotos ou vídeos. Para publicar mídias reais, configure um serviço de armazenamento durável e endpoints de upload na API. Quando a API estiver hospedada, configure o mesmo valor HTTPS nos atributos `data-api-base` de `site/index.html` e `site/anunciar.html`, além da origem do Pages em `CORS_ALLOWED_ORIGIN` no servidor.
 
 ## Executar a interface
 
